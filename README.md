@@ -25,6 +25,6 @@ See also the list of [contributors](https://github.com/alfmvna/Dont-Throw-It/con
 
 ## Acknowledgments
 
-* Bu Evaliata for *Pembimbing Mata Kuliah Proyek Internal*
+* Bu Evaliata *Pembimbing Mata Kuliah Proyek Internal*
 * Pak Supardianto *Pembimbing Materi Aplikasi Dont Throw It*
 * Politeknik Negeri Batam
