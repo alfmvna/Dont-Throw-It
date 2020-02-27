@@ -20,7 +20,7 @@ Pada zaman ini, banyak masyarakat yang memiliki smartphone untuk penggunaan kegi
 * **Allif Maulana** - *Initial work* *Coders* - [@alfmuna](https://twitter.com/alfmuna)
 * **Yani** - *Data and Reports* - [@colterize](https://twitter.com/colterize)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/alfmvna/Dont-Throw-It/contributors) who participated in this project.
 
 ## Acknowledgments
 
