@@ -1,11 +1,11 @@
 # Dont-Throw-It
-  Proyek Internal
+Proyek Internal
 
-  Aplikasi Berbagi Barang Bekas Gratis
+## Aplikasi Berbagi Barang Bekas Gratis
  
-  Allif Maulana    4311711009
+Allif Maulana    4311711009
  
-  Yani             4311711012
+Yani             4311711012
 
 
 Politeknik Negeri Batam
