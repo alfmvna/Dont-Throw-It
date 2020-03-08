@@ -17,13 +17,14 @@ Pada zaman ini, banyak masyarakat yang memiliki smartphone untuk penggunaan kegi
 
 ## Authors
 
-* **Allif Maulana** - *Initial work* *Coders* - [@alfmuna](https://twitter.com/alfmuna)
+* **Allif Maulana** - *Initial work* - *Coders* - [@alfmuna](https://twitter.com/alfmuna)
+
 * **Yani** - *Data and Reports* - [@colterize](https://twitter.com/colterize)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/alfmvna/Dont-Throw-It/contributors) who participated in this project.
 
 ## Acknowledgments
 
-* Bu Eva for *Pembimbing Mata Kuliah Proyek Internal*
-* Inspiration *Pembimbing Materi Aplikasi Dont Throw It*
+* Bu Evaliata *Pembimbing Mata Kuliah Proyek Internal*
+* Pak Supardianto *Pembimbing Materi Aplikasi Dont Throw It*
 * Politeknik Negeri Batam
