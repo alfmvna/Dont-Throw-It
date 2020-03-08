@@ -125,7 +125,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="JUQ-eS-lf3">
-                                <rect key="frame" x="50" y="294" width="314" height="260.5"/>
+                                <rect key="frame" x="50" y="294" width="314" height="318"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v16-t0-aPZ">
                                         <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
@@ -146,7 +146,7 @@
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-FZ-oCe">
-                                        <rect key="frame" x="0.0" y="160" width="314" height="40"/>
+                                        <rect key="frame" x="0.0" y="160" width="314" height="78"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="hif-v3-mCl"/>
                                         </constraints>
@@ -158,7 +158,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1wK-N2-YcD">
-                                        <rect key="frame" x="0.0" y="240" width="314" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="278" width="314" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="ATv-Bm-pjm"/>
                                         </constraints>
@@ -249,7 +249,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="6id-dS-t6P">
-                                <rect key="frame" x="50" y="244" width="314" height="418"/>
+                                <rect key="frame" x="50" y="244" width="314" height="440"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nama Depan" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1a3-0v-DUq">
                                         <rect key="frame" x="0.0" y="0.0" width="314" height="40"/>
@@ -302,7 +302,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DS9-m9-BW2">
-                                        <rect key="frame" x="0.0" y="400" width="314" height="18"/>
+                                        <rect key="frame" x="0.0" y="400" width="314" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="C3K-kd-aAp"/>
                                         </constraints>

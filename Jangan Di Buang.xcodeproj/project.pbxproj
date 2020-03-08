@@ -12,9 +12,9 @@
 		28E1970D23EEA103009D6004 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E1970C23EEA103009D6004 /* SignUpViewController.swift */; };
 		28E1970F23EEA10A009D6004 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E1970E23EEA10A009D6004 /* LoginViewController.swift */; };
 		28E1971123EEA10F009D6004 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E1971023EEA10F009D6004 /* HomeViewController.swift */; };
-		28E1971823EEBA79009D6004 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E1971723EEBA79009D6004 /* Constants.swift */; };
-		28E1971A23EEBA7D009D6004 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E1971923EEBA7D009D6004 /* Utilities.swift */; };
 		28E1971C23EEC48C009D6004 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28E1971B23EEC48C009D6004 /* GoogleService-Info.plist */; };
+		28E74FF5241531DC00A4B078 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E74FF3241531DC00A4B078 /* Constants.swift */; };
+		28E74FF6241531DC00A4B078 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E74FF4241531DC00A4B078 /* Utilities.swift */; };
 		28EB6D6723EE962A00F1C9ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB6D6623EE962A00F1C9ED /* AppDelegate.swift */; };
 		28EB6D6923EE962A00F1C9ED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB6D6823EE962A00F1C9ED /* ViewController.swift */; };
 		28EB6D6C23EE962A00F1C9ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 28EB6D6A23EE962A00F1C9ED /* Main.storyboard */; };
@@ -40,9 +40,9 @@
 		28E1970C23EEA103009D6004 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		28E1970E23EEA10A009D6004 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		28E1971023EEA10F009D6004 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		28E1971723EEBA79009D6004 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = "../../../../Downloads/CustomLoginDemo 2/CustomLoginDemo/Helpers/Constants.swift"; sourceTree = "<group>"; };
-		28E1971923EEBA7D009D6004 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = "../../../../Downloads/CustomLoginDemo 2/CustomLoginDemo/Helpers/Utilities.swift"; sourceTree = "<group>"; };
 		28E1971B23EEC48C009D6004 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		28E74FF3241531DC00A4B078 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		28E74FF4241531DC00A4B078 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		28EB6D6323EE962A00F1C9ED /* Jangan Di Buang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Jangan Di Buang.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28EB6D6623EE962A00F1C9ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28EB6D6823EE962A00F1C9ED /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -89,8 +89,8 @@
 		28E1971623EEBA69009D6004 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				28E1971923EEBA7D009D6004 /* Utilities.swift */,
-				28E1971723EEBA79009D6004 /* Constants.swift */,
+				28E74FF3241531DC00A4B078 /* Constants.swift */,
+				28E74FF4241531DC00A4B078 /* Utilities.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -308,13 +308,13 @@
 			files = (
 				28E1971123EEA10F009D6004 /* HomeViewController.swift in Sources */,
 				28B609912401519E004287E4 /* PostingViewController.swift in Sources */,
+				28E74FF6241531DC00A4B078 /* Utilities.swift in Sources */,
 				28E1970F23EEA10A009D6004 /* LoginViewController.swift in Sources */,
 				28B60993240151A8004287E4 /* ProfilViewController.swift in Sources */,
-				28E1971A23EEBA7D009D6004 /* Utilities.swift in Sources */,
+				28E74FF5241531DC00A4B078 /* Constants.swift in Sources */,
 				28E1970D23EEA103009D6004 /* SignUpViewController.swift in Sources */,
 				28EB6D6923EE962A00F1C9ED /* ViewController.swift in Sources */,
 				28EB6D6723EE962A00F1C9ED /* AppDelegate.swift in Sources */,
-				28E1971823EEBA79009D6004 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
