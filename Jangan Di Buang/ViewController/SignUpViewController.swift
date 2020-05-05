@@ -85,22 +85,16 @@ class SignUpViewController: UIViewController {
                 self.showError("Pembuatan Akun Error")
             }
             else {
-                
                 let db = Firestore.firestore()
-                
-                    db.collection("users").addDocument(data: ["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "uid": result!.user.uid ]) { (error) in
-                        
+                db.collection("users").addDocument(data: ["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "uid": result!.user.uid ]) { (error) in
                         if error != nil {
                             // Show error message
                             self.showError("Penyimpanan Akun Error")
                         }
                     }
-                
                 self.transitionToHome()
                 }
-            
             }
-        
         }
     }
     

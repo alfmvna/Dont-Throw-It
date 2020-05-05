@@ -33,101 +33,34 @@ class ProfilViewController: UIViewController {
     @IBOutlet weak var profilemail: UILabel!
     @IBOutlet weak var profilpassword: UILabel!
     
-    lazy var imagePickerController: UIImagePickerController = {
-        let controller = UIImagePickerController()
-        controller.delegate = self
-        controller.sourceType = .camera
-        return controller
-    }()
-    
-    lazy var imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.backgroundColor = .lightGray
-        return iv
-    }()
-    
-    let activityIndicator = UIActivityIndicatorView(style: .gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupViews()
-        
-        checkIfUserLoggedIn()
+        if Auth.auth().currentUser?.uid == nil {
+            logout()
+        }
+        setupProfil()
     }
-    
-    fileprivate func setupViews() {
-        view.backgroundColor = .white
-        
-        view.addSubview(imageView)
-        view.addSubview(activityIndicator)
-
-    }
-    
     //action
     @IBAction func uploadimagesButton(_ sender: Any) {
         showImagePickerControllerActionSheet()
     }
     
-    
-    @IBAction func simpan(_ sender: Any) {
-        guard let userProfile = UserServices.currentUserProfile else {return}
-        
-        guard let editedImage = self.image else {
-            print("Avatar is nil")
-            return
-        }
-        guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else {
-            return
-        }
-        
-        let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-        
-        let uid = Auth.auth().currentUser?.uid
-        let storageProfileRef = storageRef.child("profile").child(uid!)
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpg"
-        storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
-            if error != nil {
-                print(error?.localizedDescription)
-                return
-            }
-        }
+    @IBAction func savechanges(_ sender: Any) {
+        saveChanges()
     }
-    
     
     @IBAction func LogoutTapped(_ sender: Any) {
         logout()
     }
     
-    func checkIfUserLoggedIn() {
-        let user = Auth.auth().currentUser
-        if let user = user {
-            let uid = user.uid
-            let email = user.email
-            let photoURL = user.photoURL
-        }
-    }
-    
-    
     //func
     func logout(){
-        let viewController = ViewController()
-        present(viewController, animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginViewController = storyboard.instantiateViewController(withIdentifier: "VC")
+        present(loginViewController, animated: true, completion: nil)
     }
-    
-    func presentAlert(title: String, message: String) {
-        activityIndicator.stopAnimating()
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-    
 }
-
-
 
 extension ProfilViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -157,14 +90,44 @@ extension ProfilViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            image = editedImage
             profilimage.image = editedImage
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            image = originalImage
             profilimage.image = originalImage
         }
         
         dismiss(animated: true, completion: nil)
     }
     
+    func setupProfil(){
+
+        profilimage.layer.cornerRadius = profilimage.frame.size.width/2
+        profilimage.clipsToBounds = true
+        let uid = Auth.auth().currentUser?.uid
+        databaseRef.child("users").child(uid!).observeSingleEvent(of: .value) { (snapshot) in
+            if let dict = snapshot.value as? [String: AnyObject]
+            {
+                self.profilnama.text = dict["NamaDepan"] as? String
+                if let profilimageURL = dict["pic"] as? String
+                {
+                    let url = URL(string: profilimageURL)
+                    URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                        if error != nil {
+                            print(error)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            self.profilimage?.image = UIImage(data: data!)
+                        }
+                    }).resume()
+                }
+            }
+        }}
+    
+    func saveChanges(){
+ 
+    }
+    
 }
+    
+    
+
