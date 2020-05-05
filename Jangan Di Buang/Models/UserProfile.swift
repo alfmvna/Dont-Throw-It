@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UserProfile{
+struct UserProfile{
     var uid:String
     var username:String
     var email:String

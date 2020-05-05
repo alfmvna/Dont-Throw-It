@@ -51,10 +51,14 @@ class ProfilViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if Auth.auth().currentUser?.uid == nil{
+            logout()
+        }
+        fetchdata()
+        
         setupViews()
         
-        checkIfUserLoggedIn()
     }
     
     fileprivate func setupViews() {
@@ -65,15 +69,57 @@ class ProfilViewController: UIViewController {
 
     }
     
+    //setupprofile
+    func setupProfile(){
+        if Auth.auth().currentUser?.uid == nil{
+            logout()
+        } else {
+            let uid = Auth.auth().currentUser?.uid
+            databaseRef.child("users").child(uid!).observeSingleEvent(of: .value) { (snapshot) in
+                if let dict = snapshot.value as? [String:Any]
+                {
+                    self.profilnama.text = dict["NamaDepan"] as? String
+                    self.profilemail.text = dict["Email"] as? String
+                }
+            }
+        }
+    }
+    
+    
     //action
     @IBAction func uploadimagesButton(_ sender: Any) {
         showImagePickerControllerActionSheet()
     }
     
+    @IBAction func LogoutTapped(_ sender: Any) {
+        logout()
+    }
     
-    @IBAction func simpan(_ sender: Any) {
-        guard let userProfile = UserServices.currentUserProfile else {return}
+    func logout(){
+        let viewController = ViewController()
+        present(viewController, animated: true, completion: nil)
+    }
+    
+    //fetch data
+    func fetchdata() {
+        if Auth.auth().currentUser?.uid == nil{
+            logout()
+        } else {
+            let uid = Auth.auth().currentUser?.uid
+            databaseRef.child("users").child(uid!).observeSingleEvent(of: .value) { (snapshot) in
+                if let dict = snapshot.value as? [String:Any]{
+                    self.profilnama.text = dict["NamaDepan"] as? String
+                    self.profilemail.text = dict["Email"] as? String
+                    self.profilpassword.text = dict["Password"] as? String
+                }
+            }
+        }
         
+    }
+    
+
+    //simpanfoto
+    @IBAction func simpan(_ sender: Any) {
         guard let editedImage = self.image else {
             print("Avatar is nil")
             return
@@ -89,33 +135,28 @@ class ProfilViewController: UIViewController {
         
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpg"
+        
         storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
             if error != nil {
-                print(error?.localizedDescription)
+                print(error!)
                 return
             }
+            storageProfileRef.downloadURL(completion: { (url, error) in
+                if error != nil{
+                    print(error!)
+                    return
+                }
+                if let urlText = url?.absoluteString{
+                    self.databaseRef.child("users").child(uid!).updateChildValues(["photoURL" : urlText], withCompletionBlock: { (error, ref) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                    })
+                    
+                }
+            })
         }
-    }
-    
-    
-    @IBAction func LogoutTapped(_ sender: Any) {
-        logout()
-    }
-    
-    func checkIfUserLoggedIn() {
-        let user = Auth.auth().currentUser
-        if let user = user {
-            let uid = user.uid
-            let email = user.email
-            let photoURL = user.photoURL
-        }
-    }
-    
-    
-    //func
-    func logout(){
-        let viewController = ViewController()
-        present(viewController, animated: true, completion: nil)
     }
     
     func presentAlert(title: String, message: String) {

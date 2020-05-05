@@ -9,8 +9,12 @@
 import UIKit
 import FirebaseAuth
 import Firebase
+import FirebaseDatabase
+import FirebaseStorage
 
 class SignUpViewController: UIViewController {
+    
+    var ref : DatabaseReference!
     
     @IBOutlet weak var namadepanText: UITextField!
     
@@ -65,7 +69,6 @@ class SignUpViewController: UIViewController {
     @IBAction func daftarTapped(_ sender: Any) {
         
         // Validasi
-        
         let error = validateFields()
         
         if error != nil {
@@ -85,13 +88,17 @@ class SignUpViewController: UIViewController {
                 self.showError("Pembuatan Akun Error")
             }
             else {
-                let db = Firestore.firestore()
-                db.collection("users").addDocument(data: ["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "uid": result!.user.uid ]) { (error) in
-                        if error != nil {
-                            // Show error message
-                            self.showError("Penyimpanan Akun Error")
-                        }
-                    }
+//                let db = Firestore.firestore()
+//                db.collection("users").addDocument(data: ["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "uid": result!.user.uid ]) { (error) in
+//                        if error != nil {
+//                            // Show error message
+//                            self.showError("Penyimpanan Akun Error")
+//                        }
+//                    }
+                self.ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
+                
+                self.ref.child("users").setValue(["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "PhotoURL":"", "uid": result!.user.uid ])
+                
                 self.transitionToHome()
                 }
             }

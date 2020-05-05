@@ -68,5 +68,11 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    @IBAction func kembali(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
 }
 
