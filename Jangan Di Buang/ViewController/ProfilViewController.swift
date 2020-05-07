@@ -27,19 +27,19 @@ class ProfilViewController: UIViewController {
     @IBOutlet weak var profilemail: UILabel!
     @IBOutlet weak var namaTextField: UITextField!{
         didSet{
-            namaTextField.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namaTextField.setRightView(image: UIImage.init(named: "icons8-user-100")!)
             namaTextField.tintColor = .darkGray
         }
     }
     @IBOutlet weak var emailTextField: UITextField!{
         didSet{
-            emailTextField.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailTextField.setRightView(image: UIImage.init(named: "icons8-email-100")!)
             emailTextField.tintColor = .darkGray
         }
     }
     @IBOutlet weak var passwordTextField: UITextField!{
         didSet{
-            passwordTextField.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordTextField.setRightView(image: UIImage.init(named: "icons8-password-100")!)
             passwordTextField.tintColor = .darkGray
         }
     }
@@ -104,8 +104,8 @@ class ProfilViewController: UIViewController {
                 guard let dict = snapshot.value as? [String: AnyObject] else {return}
                 let user = CurrentUser(uid: uid, dictionary: dict)
                 
-                self.profilnama.text = user.namadepan
-                self.profilemail.text = user.email
+                self.namaTextField.text = user.namadepan
+                self.emailTextField.text = user.email
                 
                 self.profilimage.layer.cornerRadius = self.profilimage.bounds.height / 2
                 self.profilimage.clipsToBounds = true
@@ -137,8 +137,8 @@ class ProfilViewController: UIViewController {
         }
         guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else { return }
         
-        let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
         guard let uid = Auth.auth().currentUser?.uid else {return}
+        let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
         let storageProfileRef = storageRef.child("users").child("profile").child(uid)
         
         let metadata = StorageMetadata()
@@ -178,7 +178,7 @@ class ProfilViewController: UIViewController {
 
             let currentUser = Auth.auth().currentUser
             currentUser?.updateEmail(to: self.emailTextField.text!, completion: { (error) in
-                if error == nil{
+                if error != nil{
                     print("ada masasalah")
                 } else {
                     print("berhasil")
@@ -186,7 +186,7 @@ class ProfilViewController: UIViewController {
             })
             
             currentUser?.updatePassword(to: self.passwordTextField.text!, completion: { (error) in
-                if error == nil{
+                if error != nil{
                     print("ada masasalah")
                 } else {
                     print("berhasil")

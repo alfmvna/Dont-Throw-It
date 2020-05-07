@@ -18,28 +18,28 @@ class SignUpViewController: UIViewController {
     
     @IBOutlet weak var namadepanText: UITextField!{
         didSet{
-            namadepanText.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namadepanText.setRightView(image: UIImage.init(named: "icons8-user-100")!)
             namadepanText.tintColor = .darkGray
         }
     }
     
     @IBOutlet weak var namabelakangText: UITextField!{
         didSet{
-            namabelakangText.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namabelakangText.setRightView(image: UIImage.init(named: "icons8-user-100")!)
             namabelakangText.tintColor = .darkGray
         }
     }
     
     @IBOutlet weak var emailText: UITextField!{
         didSet{
-            emailText.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailText.setRightView(image: UIImage.init(named: "icons8-email-100")!)
             emailText.tintColor = .darkGray
         }
     }
     
     @IBOutlet weak var passwordText: UITextField!{
         didSet{
-            passwordText.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordText.setRightView(image: UIImage.init(named: "icons8-password-100")!)
             passwordText.tintColor = .darkGray
         }
     }
@@ -148,13 +148,13 @@ class SignUpViewController: UIViewController {
 
 
 extension UITextField {
-    func setLeftView(image: UIImage) {
-        let iconView = UIImageView(frame: CGRect(x: 10, y: 10, width: 20, height: 20)) // set your Own size
+    func setRightView(image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 25, height: 25)) // set your Own size
         iconView.image = image
         let iconContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 45))
         iconContainerView.addSubview(iconView)
-        leftView = iconContainerView
-        leftViewMode = .always
+        rightView = iconContainerView
+        rightViewMode = .always
         self.tintColor = .lightGray
     }
 }

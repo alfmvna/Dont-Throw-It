@@ -14,5 +14,6 @@ target 'Jangan Di Buang' do
  pod 'Firebase/Storage'
  pod 'Firebase/Messaging'
  pod 'Firebase/Database'
+ pod 'TextFieldEffects'
 
 end

@@ -13,14 +13,14 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var emailText: UITextField!{
         didSet{
-            emailText.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailText.setRightView(image: UIImage.init(named: "icons8-email-100")!)
             emailText.tintColor = .darkGray
         }
     }
     
     @IBOutlet weak var passwordText: UITextField!{
         didSet{
-            passwordText.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordText.setRightView(image: UIImage.init(named: "icons8-password-100")!)
             passwordText.tintColor = .darkGray
         }
     }
