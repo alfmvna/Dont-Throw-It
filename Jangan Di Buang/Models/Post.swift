@@ -9,13 +9,13 @@
 import Foundation
 
 class Post{
-    var id:String
+    var uid:String
     var author:String
     var alamat:String
     var nohp:String
     
-    init(id:String, author:String, alamat:String, nohp:String) {
-        self.id = id
+    init(uid:String, author:String, alamat:String, nohp:String) {
+        self.uid = uid
         self.author = author
         self.alamat = alamat
         self.nohp = nohp

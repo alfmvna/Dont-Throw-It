@@ -11,9 +11,19 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
-    @IBOutlet weak var emailText: UITextField!
+    @IBOutlet weak var emailText: UITextField!{
+        didSet{
+            emailText.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailText.tintColor = .darkGray
+        }
+    }
     
-    @IBOutlet weak var passwordText: UITextField!
+    @IBOutlet weak var passwordText: UITextField!{
+        didSet{
+            passwordText.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordText.tintColor = .darkGray
+        }
+    }
     
     @IBOutlet weak var masukButton: UIButton!
     
@@ -22,19 +32,9 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpElements()
-        
     }
     
-    func setUpElements(){
-        errorLabel.alpha = 0
-        
-        Utilities.styleTextField(emailText)
-        
-        Utilities.styleTextField(passwordText)
-        
-        Utilities.styleFilledButton(masukButton)
-    }
+
     
     func validateField() -> String? {
         
@@ -51,23 +51,28 @@ class LoginViewController: UIViewController {
 
         let email = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-            
+        
         // Login
         Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
-            
+
             if err != nil {
                 // Gagal Login
-                self.errorLabel.text = err!.localizedDescription
-                self.errorLabel.alpha = 1
-            } else {
-                let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
-                
-                self.view.window?.rootViewController = myTabbar
-                self.view.window?.makeKeyAndVisible()
-                
+                if Utilities.isEmailValid(email) == false {
+                    self.errorLabel.text = ("Email Anda Salah Format")
+                    return
+                }
+                if Utilities.isPasswordValid(password) == false {
+                    self.errorLabel.text = ("Password Salah")
+                    return
+                }
+                } else {
+                    let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
+                    
+                    self.view.window?.rootViewController = myTabbar
+                    self.view.window?.makeKeyAndVisible()
+                }
             }
         }
-    }
     
     @IBAction func kembali(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -75,4 +80,3 @@ class LoginViewController: UIViewController {
     
     
 }
-

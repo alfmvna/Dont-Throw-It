@@ -13,25 +13,48 @@ import FirebaseStorage
 import FirebaseDatabase
 import FirebaseFirestore
 
-struct MyKeys {
-    static let imagesFolder = "imagesFolder"
-    static let imagesCollection = "imagesCollection"
-    static let uid = "uid"
-    static let imageUrl = "imageUrl"
-}
-
 class ProfilViewController: UIViewController {
     
     //variables
-    let storageRef = Storage.storage().reference()
-    let databaseRef = Database.database().reference()
+    let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
+    let databaseRef = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
     var image: UIImage? = nil
+    var alertController: UIAlertController?
     
     //outlets
     @IBOutlet weak var profilimage: UIImageView!
     @IBOutlet weak var profilnama: UILabel!
     @IBOutlet weak var profilemail: UILabel!
-    @IBOutlet weak var profilpassword: UILabel!
+    @IBOutlet weak var namaTextField: UITextField!{
+        didSet{
+            namaTextField.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namaTextField.tintColor = .darkGray
+        }
+    }
+    @IBOutlet weak var emailTextField: UITextField!{
+        didSet{
+            emailTextField.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailTextField.tintColor = .darkGray
+        }
+    }
+    @IBOutlet weak var passwordTextField: UITextField!{
+        didSet{
+            passwordTextField.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordTextField.tintColor = .darkGray
+        }
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if Auth.auth().currentUser?.uid == nil{
+            logout()
+        }
+        fetchdata()
+        setupViews()
+    
+    }
     
     lazy var imagePickerController: UIImagePickerController = {
         let controller = UIImagePickerController()
@@ -49,17 +72,6 @@ class ProfilViewController: UIViewController {
     
     let activityIndicator = UIActivityIndicatorView(style: .gray)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if Auth.auth().currentUser?.uid == nil{
-            logout()
-        }
-        fetchdata()
-        
-        setupViews()
-        
-    }
     
     fileprivate func setupViews() {
         view.backgroundColor = .white
@@ -68,23 +80,6 @@ class ProfilViewController: UIViewController {
         view.addSubview(activityIndicator)
 
     }
-    
-    //setupprofile
-    func setupProfile(){
-        if Auth.auth().currentUser?.uid == nil{
-            logout()
-        } else {
-            let uid = Auth.auth().currentUser?.uid
-            databaseRef.child("users").child(uid!).observeSingleEvent(of: .value) { (snapshot) in
-                if let dict = snapshot.value as? [String:Any]
-                {
-                    self.profilnama.text = dict["NamaDepan"] as? String
-                    self.profilemail.text = dict["Email"] as? String
-                }
-            }
-        }
-    }
-    
     
     //action
     @IBAction func uploadimagesButton(_ sender: Any) {
@@ -102,21 +97,37 @@ class ProfilViewController: UIViewController {
     
     //fetch data
     func fetchdata() {
-        if Auth.auth().currentUser?.uid == nil{
-            logout()
-        } else {
-            let uid = Auth.auth().currentUser?.uid
-            databaseRef.child("users").child(uid!).observeSingleEvent(of: .value) { (snapshot) in
-                if let dict = snapshot.value as? [String:Any]{
-                    self.profilnama.text = dict["NamaDepan"] as? String
-                    self.profilemail.text = dict["Email"] as? String
-                    self.profilpassword.text = dict["Password"] as? String
+        if Auth.auth().currentUser?.uid != nil{
+            guard let uid = Auth.auth().currentUser?.uid else {return}
+            
+            databaseRef.child("users").child("profile").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dict = snapshot.value as? [String: AnyObject] else {return}
+                let user = CurrentUser(uid: uid, dictionary: dict)
+                
+                self.profilnama.text = user.namadepan
+                self.profilemail.text = user.email
+                
+                self.profilimage.layer.cornerRadius = self.profilimage.bounds.height / 2
+                self.profilimage.clipsToBounds = true
+                
+                if let profilImageURL = dict["PhotoURL"] as? String {
+                    guard let url = URL(string: profilImageURL) else {return}
+                    URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                        if error != nil {
+                            print(error!)
+                            return
+                        }
+                        DispatchQueue.main.async {
+                            self.profilimage.image = UIImage(data: data!)
+                        }
+                    }).resume()
                 }
+
+            }) { (error) in
+                print(error)
             }
         }
-        
     }
-    
 
     //simpanfoto
     @IBAction func simpan(_ sender: Any) {
@@ -124,39 +135,72 @@ class ProfilViewController: UIViewController {
             print("Avatar is nil")
             return
         }
-        guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else {
-            return
-        }
+        guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else { return }
         
         let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-        
-        let uid = Auth.auth().currentUser?.uid
-        let storageProfileRef = storageRef.child("profile").child(uid!)
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let storageProfileRef = storageRef.child("users").child("profile").child(uid)
         
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpg"
         
-        storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
-            if error != nil {
-                print(error!)
-                return
-            }
-            storageProfileRef.downloadURL(completion: { (url, error) in
-                if error != nil{
+        alertController = UIAlertController(title: "Alert", message: "Apakah Anda Ingin Menyimpan ?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Batal", style: .cancel) { (action) in
+            print("Tekan Batal")
+        }
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
+                if error != nil {
                     print(error!)
                     return
                 }
-                if let urlText = url?.absoluteString{
-                    self.databaseRef.child("users").child(uid!).updateChildValues(["photoURL" : urlText], withCompletionBlock: { (error, ref) in
-                        if error != nil {
-                            print(error!)
-                            return
-                        }
-                    })
-                    
+                storageProfileRef.downloadURL(completion: { (url, error) in
+                    if error != nil{
+                        print(error!)
+                        return
+                    }
+                    if let urlText = url?.absoluteString{
+                        self.databaseRef.child("users").child("profile").child(uid).updateChildValues(["PhotoURL" : urlText], withCompletionBlock: { (error, ref) in
+                            if error != nil {
+                                print(error!)
+                                return
+                            }
+                        })
+                        
+                    }
+                })
+            }
+            
+            let postProfile = Database.database().reference()
+            let change = [
+                "NamaDepan": self.namaTextField.text,
+            ]
+
+            let currentUser = Auth.auth().currentUser
+            currentUser?.updateEmail(to: self.emailTextField.text!, completion: { (error) in
+                if error == nil{
+                    print("ada masasalah")
+                } else {
+                    print("berhasil")
                 }
             })
+            
+            currentUser?.updatePassword(to: self.passwordTextField.text!, completion: { (error) in
+                if error == nil{
+                    print("ada masasalah")
+                } else {
+                    print("berhasil")
+                }
+            })
+            
         }
+        alertController?.addAction(cancelAction)
+        alertController?.addAction(okAction)
+        self.present(alertController!, animated: true)
+        
+        namaTextField.text?.removeAll()
+        emailTextField.text?.removeAll()
+        passwordTextField.text?.removeAll()
     }
     
     func presentAlert(title: String, message: String) {
@@ -209,3 +253,5 @@ extension ProfilViewController: UIImagePickerControllerDelegate, UINavigationCon
     }
     
 }
+
+

@@ -19,37 +19,50 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
     var image : UIImage? = nil
     
     
-    @IBOutlet weak var alamatTextField: UITextField!
-    @IBOutlet weak var nohpTextField: UITextField!
+    @IBOutlet weak var alamatTextField: UITextField!{
+        didSet {
+            alamatTextField.setLeftView(image: UIImage.init(named: "icons8-address-128")!)
+            alamatTextField.tintColor = .darkGray
+        }
+    }
+    @IBOutlet weak var nohpTextField: UITextField!{
+        didSet {
+            nohpTextField.setLeftView(image: UIImage.init(named: "icons8-call-160")!)
+            nohpTextField.tintColor = .darkGray
+        }
+    }
     @IBOutlet weak var uploadGambar: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ref = Database.database().reference()
+        ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
         refst = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
         
         // Do any additional setup after loading the view.
     }
     
     @IBAction func simpan(_ sender: Any) {
-        let userID = Auth.auth().currentUser?.uid
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let postRef = Database.database().reference().child("posts").child(uid).childByAutoId()
         
         let postObject = [
-            "alamat": alamatTextField.text,
-            "no handphone": nohpTextField.text,
+            "alamat": alamatTextField.text!,
+            "no handphone": nohpTextField.text!,
             "timestamp": [".sv":"timestamp"]
         ] as [String:Any]
-
-        ref?.child("Posts").child(userID!).childByAutoId().setValue(postObject, withCompletionBlock: { (error, in) in
+        
+        postRef.setValue(postObject, withCompletionBlock: {error, ref in
             if error == nil {
                 self.dismiss(animated: true, completion: nil)
             } else {
                 //error handle
             }
         })
-    
+        
     }
+        
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }

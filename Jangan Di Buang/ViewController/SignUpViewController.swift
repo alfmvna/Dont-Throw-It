@@ -16,37 +16,46 @@ class SignUpViewController: UIViewController {
     
     var ref : DatabaseReference!
     
-    @IBOutlet weak var namadepanText: UITextField!
+    @IBOutlet weak var namadepanText: UITextField!{
+        didSet{
+            namadepanText.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namadepanText.tintColor = .darkGray
+        }
+    }
     
-    @IBOutlet weak var namabelakangText: UITextField!
+    @IBOutlet weak var namabelakangText: UITextField!{
+        didSet{
+            namabelakangText.setLeftView(image: UIImage.init(named: "icons8-user-100")!)
+            namabelakangText.tintColor = .darkGray
+        }
+    }
     
-    @IBOutlet weak var emailText: UITextField!
+    @IBOutlet weak var emailText: UITextField!{
+        didSet{
+            emailText.setLeftView(image: UIImage.init(named: "icons8-email-100")!)
+            emailText.tintColor = .darkGray
+        }
+    }
     
-    @IBOutlet weak var passwordText: UITextField!
+    @IBOutlet weak var passwordText: UITextField!{
+        didSet{
+            passwordText.setLeftView(image: UIImage.init(named: "icons8-password-100")!)
+            passwordText.tintColor = .darkGray
+        }
+    }
     
-    @IBOutlet weak var daftarButton: UIButton!
+    @IBOutlet weak var daftarButton: UIButton!{
+        didSet{
+            daftarButton.tintColor = .darkGray
+        }
+    }
     
     @IBOutlet weak var errorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpElements()
-        // Do any additional setup after loading the view.
     }
     
-    func setUpElements() {
-        errorLabel.alpha = 0
-        
-        Utilities.styleTextField(namadepanText)
-        
-        Utilities.styleTextField(namabelakangText)
-        
-        Utilities.styleTextField(emailText)
-        
-        Utilities.styleTextField(passwordText)
-        
-        Utilities.styleFilledButton(daftarButton)
-    }
     
     func validateFields() -> String? {
         
@@ -54,14 +63,23 @@ class SignUpViewController: UIViewController {
             namabelakangText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            return "Isi Kotak Yang Kosong"
+            showError("Isi Kotak Yang Kosong")
+            return ""
         }
         
         let cleanedPassword = passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanedEmail = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if Utilities.isPasswordValid(cleanedPassword) == false {
-           return "Password Wajib 6 Character, Huruf Besar, Angka Atau Simbol"
+            showError("Password Wajib 6 Character, Huruf Besar, Angka Atau Simbol")
+            return ""
         }
+        
+        if Utilities.isEmailValid(cleanedEmail) == false {
+            showError("Email Anda Salah Format")
+            return ""
+        }
+        
         
         return nil
     }
@@ -72,32 +90,36 @@ class SignUpViewController: UIViewController {
         let error = validateFields()
         
         if error != nil {
-            showError("")
+        
         } else {
 
-        // Cleaned Version
-        let namadepan = namadepanText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let namabelakang = namabelakangText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let email = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let password = passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            // Cleaned Version
+            let namadepan = namadepanText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let namabelakang = namabelakangText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let email = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let password = passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             
         // Buat User
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             // Check Error
             if err != nil {
-                self.showError("Pembuatan Akun Error")
+                
+                Auth.auth().fetchSignInMethods(forEmail: self.emailText.text!, completion: { (provider, error) in
+                    if let error = error {
+                        self.showError("Email Tersedia")
+                        print(error)
+                    } else if let provider = provider {
+                        self.showError("Email Sudah Terdaftar")
+                        print(provider)
+                    }
+                })
             }
             else {
-//                let db = Firestore.firestore()
-//                db.collection("users").addDocument(data: ["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "uid": result!.user.uid ]) { (error) in
-//                        if error != nil {
-//                            // Show error message
-//                            self.showError("Penyimpanan Akun Error")
-//                        }
-//                    }
                 self.ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
                 
-                self.ref.child("users").setValue(["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "PhotoURL":"", "uid": result!.user.uid ])
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                
+                self.ref.child("users").child("profile").child(uid).setValue(["NamaDepan":namadepan, "NamaBelakang":namabelakang, "Email":email, "Password":password, "PhotoURL":"", "uid": result!.user.uid ])
                 
                 self.transitionToHome()
                 }
@@ -119,4 +141,20 @@ class SignUpViewController: UIViewController {
         self.view.window?.makeKeyAndVisible()
     }
     
+    @IBAction func kembali(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+
+extension UITextField {
+    func setLeftView(image: UIImage) {
+        let iconView = UIImageView(frame: CGRect(x: 10, y: 10, width: 20, height: 20)) // set your Own size
+        iconView.image = image
+        let iconContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 45))
+        iconContainerView.addSubview(iconView)
+        leftView = iconContainerView
+        leftViewMode = .always
+        self.tintColor = .lightGray
+    }
 }

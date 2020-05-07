@@ -8,12 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		28370CA9244C89AE00B68466 /* AlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28370CA8244C89AE00B68466 /* AlertService.swift */; };
+		288828232462D00000620CE0 /* ImageServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288828222462D00000620CE0 /* ImageServices.swift */; };
 		28AA2B9C24616FCC00685BEE /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2B9A24616FCC00685BEE /* PostTableViewCell.swift */; };
 		28AA2B9D24616FCC00685BEE /* PostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AA2B9B24616FCC00685BEE /* PostTableViewCell.xib */; };
 		28AA2BA224617D5E00685BEE /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2BA124617D5E00685BEE /* Post.swift */; };
 		28AA2BA42461A4EA00685BEE /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2BA32461A4EA00685BEE /* NewPostViewController.swift */; };
-		28AA2BA62461BFD300685BEE /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2BA52461BFD300685BEE /* UserProfile.swift */; };
-		28AA2BA82461C03F00685BEE /* UserServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2BA72461C03F00685BEE /* UserServices.swift */; };
 		28AA2BAA2461CF8900685BEE /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA2BA92461CF8900685BEE /* CurrentUser.swift */; };
 		28B609912401519E004287E4 /* PostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B609902401519E004287E4 /* PostingViewController.swift */; };
 		28B60993240151A8004287E4 /* ProfilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B60992240151A8004287E4 /* ProfilViewController.swift */; };
@@ -44,12 +43,11 @@
 
 /* Begin PBXFileReference section */
 		28370CA8244C89AE00B68466 /* AlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertService.swift; sourceTree = "<group>"; };
+		288828222462D00000620CE0 /* ImageServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServices.swift; sourceTree = "<group>"; };
 		28AA2B9A24616FCC00685BEE /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		28AA2B9B24616FCC00685BEE /* PostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostTableViewCell.xib; sourceTree = "<group>"; };
 		28AA2BA124617D5E00685BEE /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		28AA2BA32461A4EA00685BEE /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
-		28AA2BA52461BFD300685BEE /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		28AA2BA72461C03F00685BEE /* UserServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserServices.swift; sourceTree = "<group>"; };
 		28AA2BA92461CF8900685BEE /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		28B609902401519E004287E4 /* PostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostingViewController.swift; sourceTree = "<group>"; };
 		28B60992240151A8004287E4 /* ProfilViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilViewController.swift; sourceTree = "<group>"; };
@@ -106,8 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				28AA2BA124617D5E00685BEE /* Post.swift */,
-				28AA2BA52461BFD300685BEE /* UserProfile.swift */,
 				28AA2BA92461CF8900685BEE /* CurrentUser.swift */,
+				288828222462D00000620CE0 /* ImageServices.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -118,7 +116,6 @@
 				28E74FF3241531DC00A4B078 /* Constants.swift */,
 				28E74FF4241531DC00A4B078 /* Utilities.swift */,
 				28370CA8244C89AE00B68466 /* AlertService.swift */,
-				28AA2BA72461C03F00685BEE /* UserServices.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -341,12 +338,11 @@
 			files = (
 				28AA2B9C24616FCC00685BEE /* PostTableViewCell.swift in Sources */,
 				28AA2BA42461A4EA00685BEE /* NewPostViewController.swift in Sources */,
-				28AA2BA62461BFD300685BEE /* UserProfile.swift in Sources */,
+				288828232462D00000620CE0 /* ImageServices.swift in Sources */,
 				28E1971123EEA10F009D6004 /* HomeViewController.swift in Sources */,
 				28B609912401519E004287E4 /* PostingViewController.swift in Sources */,
 				28AA2BA224617D5E00685BEE /* Post.swift in Sources */,
 				28E74FF6241531DC00A4B078 /* Utilities.swift in Sources */,
-				28AA2BA82461C03F00685BEE /* UserServices.swift in Sources */,
 				28E1970F23EEA10A009D6004 /* LoginViewController.swift in Sources */,
 				28370CA9244C89AE00B68466 /* AlertService.swift in Sources */,
 				28B60993240151A8004287E4 /* ProfilViewController.swift in Sources */,

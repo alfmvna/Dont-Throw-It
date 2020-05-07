@@ -18,7 +18,7 @@ class Utilities {
         
         bottomLine.frame = CGRect(x: 0, y: textfield.frame.height - 2, width: textfield.frame.width, height: 2)
         
-        bottomLine.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 255/255, alpha: 1).cgColor
+        bottomLine.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
         
         // Remove border on text field
         textfield.borderStyle = .none
@@ -46,9 +46,17 @@ class Utilities {
     }
     
     static func isPasswordValid(_ password : String) -> Bool {
-        
+
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
         return passwordTest.evaluate(with: password)
     }
     
+    static func isEmailValid(_ email : String) -> Bool {
+        
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailFormat)
+        return emailTest.evaluate(with: email)
+    }
+    
 }
+

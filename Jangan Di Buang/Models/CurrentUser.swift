@@ -12,12 +12,14 @@ struct CurrentUser {
     let uid: String
     let namadepan: String
     let email: String
+    let password: String
     let photoURL: String
     
     init(uid: String, dictionary: [String: Any]) {
-        self.uid = uid
+        self.uid = dictionary["uid"] as? String ?? ""
         self.namadepan = dictionary["NamaDepan"] as? String ?? ""
-        self.email = dictionary["email"] as? String ?? ""
-        self.photoURL = dictionary["photoURL"] as? String ?? ""
+        self.email = dictionary["Email"] as? String ?? ""
+        self.password = dictionary["Password"] as? String ?? ""
+        self.photoURL = dictionary["PhotoURL"] as? String ?? ""
     }
 }
