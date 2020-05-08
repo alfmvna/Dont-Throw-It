@@ -43,17 +43,18 @@ class ProfilViewController: UIViewController {
             passwordTextField.tintColor = .darkGray
         }
     }
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         if Auth.auth().currentUser?.uid == nil{
             logout()
         }
         fetchdata()
         setupViews()
-    
+        
     }
     
     lazy var imagePickerController: UIImagePickerController = {
@@ -84,10 +85,6 @@ class ProfilViewController: UIViewController {
     //action
     @IBAction func uploadimagesButton(_ sender: Any) {
         showImagePickerControllerActionSheet()
-    }
-    
-    @IBAction func LogoutTapped(_ sender: Any) {
-        logout()
     }
     
     func logout(){

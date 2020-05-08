@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController{
     
     @IBOutlet weak var emailText: UITextField!{
         didSet{
@@ -26,12 +26,13 @@ class LoginViewController: UIViewController {
     }
     
     @IBOutlet weak var masukButton: UIButton!
-    
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var viewMasuk: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        masukButton.layer.cornerRadius = 15.00
+        viewMasuk.layer.cornerRadius = 10.00
     }
     
 
@@ -66,17 +67,19 @@ class LoginViewController: UIViewController {
                     return
                 }
                 } else {
-                    let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
+                
+                let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
                     
-                    self.view.window?.rootViewController = myTabbar
-                    self.view.window?.makeKeyAndVisible()
-                }
+                self.view.window?.rootViewController = myTabbar
+                self.view.window?.makeKeyAndVisible()
             }
         }
+    }
     
     @IBAction func kembali(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
+
     
 }

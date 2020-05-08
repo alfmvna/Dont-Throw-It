@@ -14,12 +14,18 @@ import FirebaseAuth
 
 class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDelegate {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     var ref : DatabaseReference?
     var refst : StorageReference?
     let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
     let databaseRef = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
     var image : UIImage? = nil
     var alertController: UIAlertController?
+    
+    @IBOutlet weak var cancelButton: UIButton!
     
     @IBOutlet weak var alamatTextField: UITextField!{
         didSet {
@@ -42,7 +48,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
         refst = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
         
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func simpan(_ sender: Any) {

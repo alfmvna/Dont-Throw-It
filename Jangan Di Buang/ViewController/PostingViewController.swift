@@ -12,8 +12,17 @@ import FirebaseDatabase
 import FirebaseStorage
 
 class PostingViewController: UIViewController{
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     @IBOutlet weak var newPost: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
     
 //    var tableView:UITableView!
 //
@@ -58,6 +67,8 @@ class PostingViewController: UIViewController{
 //    }
     
     @IBAction func newPost(_ sender: UIButton) {
+
     }
+    
     
 }

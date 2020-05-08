@@ -10,15 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var masukButon: UIButton!
+    @IBOutlet weak var masukButton: UIButton!
     @IBOutlet weak var daftarButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        // Do any additional setup after loading the view.
+
+        
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
 
 
 }

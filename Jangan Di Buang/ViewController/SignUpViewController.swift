@@ -44,16 +44,16 @@ class SignUpViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var daftarButton: UIButton!{
-        didSet{
-            daftarButton.tintColor = .darkGray
-        }
-    }
-    
+    @IBOutlet weak var daftarButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var viewDaftar: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        daftarButton.layer.cornerRadius = 15.0
+        emailText.layer.cornerRadius = 15.0
+        viewDaftar.layer.cornerRadius = 10.00
+        
     }
     
     

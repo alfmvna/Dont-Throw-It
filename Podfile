@@ -15,5 +15,7 @@ target 'Jangan Di Buang' do
  pod 'Firebase/Messaging'
  pod 'Firebase/Database'
  pod 'TextFieldEffects'
+ pod 'BubbleTransition', '~> 3.2.0'
+ pod 'TransitionButton'
 
 end

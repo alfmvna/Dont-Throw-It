@@ -29,20 +29,13 @@ class Utilities {
     }
     
     static func styleFilledButton(_ button:UIButton) {
-        
-        // Filled rounded corner style
-        button.backgroundColor = UIColor.init(red: 100/255, green: 0/255, blue: 255/255, alpha: 1)
-        button.layer.cornerRadius = 25.0
-        button.tintColor = UIColor.white
+        button.layer.cornerRadius = 15.0
     }
     
     static func styleHollowButton(_ button:UIButton) {
         
-        // Hollow rounded corner style
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.cornerRadius = 25.0
-        button.tintColor = UIColor.black
+        button.layer.cornerRadius = 7.5
+        
     }
     
     static func isPasswordValid(_ password : String) -> Bool {
@@ -58,5 +51,6 @@ class Utilities {
         return emailTest.evaluate(with: email)
     }
     
+
 }
 

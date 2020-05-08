@@ -11,13 +11,18 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class HomeViewController: ViewController, UITableViewDelegate, UITableViewDataSource{
     
     var tableView:UITableView!
     
-    var posts = [Post]()
+    var posts = [
+        Post(uid: "1", author: "Allif Maulana", alamat: "Batu Aji", nohp: "081369696969"),
+        Post(uid: "2", author: "Yani", alamat: "Batam Center", nohp: "085656565656"),
+        Post(uid: "3", author: "Fajar", alamat: "Bengkong", nohp: "081234123412")
+    ]
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         tableView = UITableView(frame: view.bounds, style: .plain)
         
