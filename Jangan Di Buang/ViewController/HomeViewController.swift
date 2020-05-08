@@ -31,14 +31,14 @@ class HomeViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         
         view.addSubview(tableView)
 
-        var layoutGuide:UILayoutGuide
-        
-        layoutGuide = view.safeAreaLayoutGuide
-        
-        tableView.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor).isActive = true
-        tableView.topAnchor	.constraint(equalTo: layoutGuide.topAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: layoutGuide.trailingAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor).isActive = true
+//        var layoutGuide:UILayoutGuide
+//        
+//        layoutGuide = view.safeAreaLayoutGuide
+//        
+//        tableView.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor).isActive = true
+//        tableView.topAnchor    .constraint(equalTo: layoutGuide.topAnchor).isActive = true
+//        tableView.trailingAnchor.constraint(equalTo: layoutGuide.trailingAnchor).isActive = true
+//        tableView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor).isActive = true
         
         tableView.delegate = self
         tableView.dataSource = self

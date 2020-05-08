@@ -44,8 +44,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
         refst = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
         

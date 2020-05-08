@@ -52,17 +52,8 @@ class SignUpViewController: UIViewController {
         super.viewDidLoad()
         daftarButton.layer.cornerRadius = 15.0
         emailText.layer.cornerRadius = 15.0
-        viewDaftar.layer.cornerRadius = 10.00
-        viewDaftar.layer.shadowColor = UIColor.white.cgColor
-        viewDaftar.layer.shadowOpacity = 1
-        viewDaftar.layer.shadowOffset = .zero
-        viewDaftar.layer.shadowRadius = 10
-        
-        viewDaftar.layer.shadowPath = UIBezierPath(rect: viewDaftar.bounds) .cgPath
-        viewDaftar.layer.shouldRasterize = true
-        
+        viewDaftar.layer.cornerRadius = 15.00
     }
-    
     
     func validateFields() -> String? {
         

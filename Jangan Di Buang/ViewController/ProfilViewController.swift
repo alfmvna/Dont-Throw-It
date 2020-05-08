@@ -26,7 +26,7 @@ class ProfilViewController: UIViewController {
 
     @IBOutlet weak var viewCorner: UIView!
     @IBOutlet weak var profilimage: UIImageView!
-    
+    @IBOutlet weak var logoutButton: UIButton!
     @IBOutlet weak var contohTextField: UITextField!{
         didSet{
             contohTextField.setRightView(image: UIImage.init(named: "icons8-user-100")!)
@@ -85,9 +85,28 @@ class ProfilViewController: UIViewController {
         showImagePickerControllerActionSheet()
     }
     
+    @IBAction func logoutTapped(_ sender: Any) {
+        logout()
+    }
+    
+    
     func logout(){
-        let viewController = ViewController()
-        present(viewController, animated: true, completion: nil)
+        alertController = UIAlertController(title: "Alert", message: "Apakah Anda Ingin Keluar ?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Batal", style: .destructive) { (action) in
+            print("Tekan Batal")
+        }
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            do {
+                try Auth.auth().signOut()
+                print("Berhasil Logout")
+            } catch let err {
+                print("Gagal Untuk Logout", err)
+            }
+        }
+
+        alertController?.addAction(cancelAction)
+        alertController?.addAction(okAction)
+        self.present(alertController!, animated: true)
     }
     
     //fetch data

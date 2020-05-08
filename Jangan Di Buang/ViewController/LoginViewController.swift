@@ -68,6 +68,9 @@ class LoginViewController: UIViewController{
                 }
                 } else {
                 
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                print("telah berhasil login dengan UID", uid)
+                
                 let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
                     
                 self.view.window?.rootViewController = myTabbar
@@ -80,6 +83,5 @@ class LoginViewController: UIViewController{
         dismiss(animated: true, completion: nil)
     }
     
-
     
 }
