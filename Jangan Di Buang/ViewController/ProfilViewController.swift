@@ -15,20 +15,22 @@ import FirebaseFirestore
 
 class ProfilViewController: UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     //variables
     let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
     let databaseRef = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
     var image: UIImage? = nil
     var alertController: UIAlertController?
-    
-    //outlets
+
+    @IBOutlet weak var viewCorner: UIView!
     @IBOutlet weak var profilimage: UIImageView!
-    @IBOutlet weak var profilnama: UILabel!
-    @IBOutlet weak var profilemail: UILabel!
-    @IBOutlet weak var namaTextField: UITextField!{
+    
+    @IBOutlet weak var contohTextField: UITextField!{
         didSet{
-            namaTextField.setRightView(image: UIImage.init(named: "icons8-user-100")!)
-            namaTextField.tintColor = .darkGray
+            contohTextField.setRightView(image: UIImage.init(named: "icons8-user-100")!)
+            contohTextField.tintColor = .darkGray
         }
     }
     @IBOutlet weak var emailTextField: UITextField!{
@@ -47,11 +49,8 @@ class ProfilViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewCorner.layer.cornerRadius = 15.00
         
-        
-        if Auth.auth().currentUser?.uid == nil{
-            logout()
-        }
         fetchdata()
         setupViews()
         
@@ -73,9 +72,8 @@ class ProfilViewController: UIViewController {
     
     let activityIndicator = UIActivityIndicatorView(style: .gray)
     
-    
     fileprivate func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .darkGray
         
         view.addSubview(imageView)
         view.addSubview(activityIndicator)
@@ -99,10 +97,11 @@ class ProfilViewController: UIViewController {
             
             databaseRef.child("users").child("profile").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let dict = snapshot.value as? [String: AnyObject] else {return}
+                
                 let user = CurrentUser(uid: uid, dictionary: dict)
                 
-                self.namaTextField.text = user.namadepan
-                self.emailTextField.text = user.email
+                self.contohTextField.text! = user.namadepan
+                self.emailTextField.text! = user.email
                 
                 self.profilimage.layer.cornerRadius = self.profilimage.bounds.height / 2
                 self.profilimage.clipsToBounds = true
@@ -121,7 +120,7 @@ class ProfilViewController: UIViewController {
                 }
 
             }) { (error) in
-                print(error)
+                print("Error di Fetch Data")
             }
         }
     }
@@ -163,41 +162,45 @@ class ProfilViewController: UIViewController {
                                 return
                             }
                         })
-                        
                     }
                 })
             }
             
-            let postProfile = Database.database().reference()
-            let change = [
-                "NamaDepan": self.namaTextField.text,
-            ]
-
-            let currentUser = Auth.auth().currentUser
-            currentUser?.updateEmail(to: self.emailTextField.text!, completion: { (error) in
-                if error != nil{
-                    print("ada masasalah")
-                } else {
-                    print("berhasil")
-                }
-            })
+            let postObject = [
+                "NamaDepan": self.contohTextField.text!,
+                "UpdateTerbaru": [".sv":"timestamp"]
+            ] as [String:Any]
             
-            currentUser?.updatePassword(to: self.passwordTextField.text!, completion: { (error) in
-                if error != nil{
-                    print("ada masasalah")
-                } else {
-                    print("berhasil")
+            self.databaseRef.child("users").child("profile").child(uid).updateChildValues(postObject) { (error, database) in
+                if error != nil {
+                    print("Error UpdateChild.Users")
                 }
-            })
+            }
             
+//            let currentUser = Auth.auth().currentUser
+//            currentUser?.updateEmail(to: self.emailTextField.text!) { error in
+//                if let error = error {
+//                    print("Masalah Pada Email")
+//                } else {
+//                    print("CHANGED")
+//                    let uid = Auth.auth().currentUser!.uid
+//                    let thisUserRef = self.databaseRef.child("users").child(uid)
+//                    let thisUserEmailRef = thisUserRef.child("email")
+//                    thisUserEmailRef.setValue(self.emailTextField.text!)
+//                }
+//            }
+//            currentUser?.updatePassword(to: self.passwordTextField.text!, completion: { (error) in
+//                if error != nil{
+//                    print("Masalah Pada Password")
+//                } else {
+//                    print("berhasil")
+//                }
+//            })
         }
         alertController?.addAction(cancelAction)
         alertController?.addAction(okAction)
         self.present(alertController!, animated: true)
-        
-        namaTextField.text?.removeAll()
-        emailTextField.text?.removeAll()
-        passwordTextField.text?.removeAll()
+
     }
     
     func presentAlert(title: String, message: String) {

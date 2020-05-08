@@ -26,7 +26,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
     var alertController: UIAlertController?
     
     @IBOutlet weak var cancelButton: UIButton!
-    
     @IBOutlet weak var alamatTextField: UITextField!{
         didSet {
             alamatTextField.setRightView(image: UIImage.init(named: "icons8-address-128")!)
@@ -44,6 +43,8 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
         refst = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
@@ -97,7 +98,7 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
                         return
                     }
                     if let urlText = url?.absoluteString{
-                        self.databaseRef.child("posts").child("profile").child(uid).child(key).updateChildValues(["PhotoURL" : urlText], withCompletionBlock: { (error, ref) in
+                        self.databaseRef.child("users").child("profile").child(uid).child(key).updateChildValues(["PhotoURL" : urlText], withCompletionBlock: { (error, ref) in
                             if error != nil {
                                 print(error!)
                                 return

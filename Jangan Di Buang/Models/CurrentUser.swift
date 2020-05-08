@@ -17,9 +17,9 @@ struct CurrentUser {
     
     init(uid: String, dictionary: [String: Any]) {
         self.uid = dictionary["uid"] as? String ?? ""
-        self.namadepan = dictionary["NamaDepan"] as? String ?? ""
         self.email = dictionary["Email"] as? String ?? ""
         self.password = dictionary["Password"] as? String ?? ""
+        self.namadepan = dictionary["NamaDepan"] as? String ?? ""
         self.photoURL = dictionary["PhotoURL"] as? String ?? ""
     }
 }
