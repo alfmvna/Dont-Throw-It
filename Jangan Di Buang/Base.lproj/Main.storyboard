@@ -688,7 +688,7 @@
                                 <color key="textColor" red="1" green="0.11493108740000001" blue="0.1001915493" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aX9-Fn-cVE">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icons8-client-management-96" translatesAutoresizingMaskIntoConstraints="NO" id="aX9-Fn-cVE">
                                 <rect key="frame" x="66" y="230" width="282" height="187"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -755,20 +755,24 @@
                                         <rect key="frame" x="0.0" y="0.0" width="330" height="460"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-client-management-96" translatesAutoresizingMaskIntoConstraints="NO" id="tGu-8a-St7">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-name-100" translatesAutoresizingMaskIntoConstraints="NO" id="tGu-8a-St7">
                                         <rect key="frame" x="65" y="30" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="200" id="983-cC-S7c"/>
                                             <constraint firstAttribute="width" constant="200" id="oya-Ks-LmF"/>
                                         </constraints>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1e-cC-S5T">
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1e-cC-S5T">
                                         <rect key="frame" x="77.5" y="42.5" width="175" height="175"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="175" id="5m6-FV-VPh"/>
                                             <constraint firstAttribute="width" constant="175" id="oft-CA-Gan"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <size key="titleShadowOffset" width="5" height="5"/>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
                                         <connections>
                                             <action selector="uploadimagesButton:" destination="q1o-43-Y9F" eventType="touchUpInside" id="zj2-CX-M47"/>
                                         </connections>
@@ -845,6 +849,16 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yqu-2e-53J">
+                                        <rect key="frame" x="15" y="410" width="300" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="FQF-wU-DDS"/>
+                                            <constraint firstAttribute="height" constant="40" id="YiM-hM-AG1"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -852,9 +866,11 @@
                                     <constraint firstItem="GGJ-5C-DKx" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="50" id="Cqj-rg-tz1"/>
                                     <constraint firstItem="z1e-cC-S5T" firstAttribute="centerX" secondItem="AvL-xY-tAl" secondAttribute="centerX" id="G25-ax-pP8"/>
                                     <constraint firstItem="TWu-7v-YPv" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="100" id="R9I-TG-YeJ"/>
+                                    <constraint firstItem="yqu-2e-53J" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="200" id="WSm-Z1-VAZ"/>
                                     <constraint firstItem="imz-mP-oYr" firstAttribute="centerX" secondItem="AvL-xY-tAl" secondAttribute="centerX" id="chJ-Km-XgB"/>
                                     <constraint firstItem="tGu-8a-St7" firstAttribute="centerX" secondItem="AvL-xY-tAl" secondAttribute="centerX" id="dkp-Dy-qgd"/>
                                     <constraint firstItem="imz-mP-oYr" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="150" id="mll-3c-Irn"/>
+                                    <constraint firstItem="yqu-2e-53J" firstAttribute="centerX" secondItem="AvL-xY-tAl" secondAttribute="centerX" id="oFH-IS-5Gt"/>
                                     <constraint firstItem="z1e-cC-S5T" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="-100" id="oXY-31-GMg"/>
                                     <constraint firstItem="GGJ-5C-DKx" firstAttribute="centerX" secondItem="AvL-xY-tAl" secondAttribute="centerX" id="q6v-QV-3Kx"/>
                                     <constraint firstItem="tGu-8a-St7" firstAttribute="centerY" secondItem="AvL-xY-tAl" secondAttribute="centerY" constant="-100" id="rwA-YU-0Cj"/>
@@ -911,6 +927,7 @@
                     <connections>
                         <outlet property="contohTextField" destination="GGJ-5C-DKx" id="78u-7V-hbD"/>
                         <outlet property="emailTextField" destination="TWu-7v-YPv" id="WCy-T6-Iz3"/>
+                        <outlet property="errorLabel" destination="yqu-2e-53J" id="8go-OR-TF8"/>
                         <outlet property="logoutButton" destination="QBj-ev-FWt" id="DtI-i9-YLj"/>
                         <outlet property="passwordTextField" destination="imz-mP-oYr" id="ZVp-xH-qjq"/>
                         <outlet property="profilimage" destination="tGu-8a-St7" id="HOE-eb-NdD"/>
@@ -930,11 +947,11 @@
         <image name="icons8-client-management-96 (1)" width="96" height="96"/>
         <image name="icons8-client-management-97" width="96" height="96"/>
         <image name="icons8-go-back-64" width="64" height="64"/>
+        <image name="icons8-name-100" width="100" height="100"/>
         <image name="icons8-plus-512" width="512" height="512"/>
         <image name="icons8-plus-96" width="96" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="oAc-6u-7XE"/>
-        <segue reference="lT0-Uu-kJc"/>
+        <segue reference="oJC-Mw-V01"/>
     </inferredMetricsTieBreakers>
 </document>

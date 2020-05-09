@@ -11,6 +11,7 @@ import FirebaseAuth
 import Firebase
 import FirebaseDatabase
 import FirebaseStorage
+import JGProgressHUD
 
 class SignUpViewController: UIViewController {
     
@@ -22,21 +23,18 @@ class SignUpViewController: UIViewController {
             namadepanText.tintColor = .darkGray
         }
     }
-    
     @IBOutlet weak var namabelakangText: UITextField!{
         didSet{
             namabelakangText.setRightView(image: UIImage.init(named: "icons8-user-100")!)
             namabelakangText.tintColor = .darkGray
         }
     }
-    
     @IBOutlet weak var emailText: UITextField!{
         didSet{
             emailText.setRightView(image: UIImage.init(named: "icons8-email-100")!)
             emailText.tintColor = .darkGray
         }
     }
-    
     @IBOutlet weak var passwordText: UITextField!{
         didSet{
             passwordText.setRightView(image: UIImage.init(named: "icons8-password-100")!)
@@ -50,9 +48,24 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         daftarButton.layer.cornerRadius = 15.0
         emailText.layer.cornerRadius = 15.0
         viewDaftar.layer.cornerRadius = 15.00
+        
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.namadepanText.becomeFirstResponder()
+            self.namabelakangText.becomeFirstResponder()
+            self.emailText.becomeFirstResponder()
+            self.passwordText.becomeFirstResponder()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     func validateFields() -> String? {
@@ -62,6 +75,7 @@ class SignUpViewController: UIViewController {
             emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             showError("Isi Kotak Yang Kosong")
+            timerShowKosong()
             return ""
         }
         
@@ -70,19 +84,24 @@ class SignUpViewController: UIViewController {
         
         if Utilities.isPasswordValid(cleanedPassword) == false {
             showError("Password Wajib 6 Character, Huruf Besar, Angka Atau Simbol")
+            timerShowKosong()
             return ""
         }
         
         if Utilities.isEmailValid(cleanedEmail) == false {
             showError("Email Anda Salah Format")
+            timerShowKosong()
             return ""
         }
-        
-        
         return nil
     }
 
     @IBAction func daftarTapped(_ sender: Any) {
+        self.view.endEditing(true)
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Loading"
+        hud.show(in: self.view)
+        hud.dismiss(afterDelay: 3.0)
         
         // Validasi
         let error = validateFields()
@@ -101,18 +120,18 @@ class SignUpViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             // Check Error
             if err != nil {
-                
                 Auth.auth().fetchSignInMethods(forEmail: self.emailText.text!, completion: { (provider, error) in
                     if let error = error {
                         self.showError("Email Tersedia")
+                        self.timerShowKosong()
                         print(error)
                     } else if let provider = provider {
                         self.showError("Email Sudah Terdaftar")
+                        self.timerShowKosong()
                         print(provider)
                     }
                 })
-            }
-            else {
+            } else {
                 self.ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
                 
                 guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -142,8 +161,14 @@ class SignUpViewController: UIViewController {
     @IBAction func kembali(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    func timerShowKosong(){
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.errorLabel.text = ""
+        }
+    }
+    
 }
-
 
 extension UITextField {
     func setRightView(image: UIImage) {

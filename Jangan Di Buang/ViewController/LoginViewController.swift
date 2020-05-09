@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class LoginViewController: UIViewController{
     
@@ -33,55 +34,75 @@ class LoginViewController: UIViewController{
         super.viewDidLoad()
         masukButton.layer.cornerRadius = 15.00
         viewMasuk.layer.cornerRadius = 10.00
-    }
-    
 
-    
-    func validateField() -> String? {
-        
-        if emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            return "Isi Kotak Yang Kosong"
-        }
-        
-        return nil
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+    
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.emailText.becomeFirstResponder()
+            self.passwordText.becomeFirstResponder()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
  
     @IBAction func masukTapped(_ sender: Any) {
-
-        let email = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let password = passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.view.endEditing(true)
         
-        // Login
-        Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
-
-            if err != nil {
-                // Gagal Login
-                if Utilities.isEmailValid(email) == false {
-                    self.errorLabel.text = ("Email Anda Salah Format")
-                    return
-                }
-                if Utilities.isPasswordValid(password) == false {
-                    self.errorLabel.text = ("Password Salah")
-                    return
-                }
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Loading"
+        hud.show(in: self.view)
+        hud.dismiss(afterDelay: 2.5)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            let email = self.emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            let password = self.passwordText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            // Login
+            Auth.auth().signIn(withEmail: email, password: password) { (result, err) in
+                if err != nil {
+                    // Gagal Login
+                    if Utilities.isEmailValid(email) == false {
+                        if self.emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+                            self.passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                            self.errorLabel.text = ("Silahkan Isi Kotak Yang Kosong")
+                            self.timerShowKosong()
+                            return
+                        } else {
+                            self.errorLabel.text = ("Email Anda Salah")
+                            self.timerShowKosong()
+                            return
+                        }
+                    }
+                    if Utilities.isPasswordValid(password) == false {
+                        self.errorLabel.text = ("Password Salah")
+                        self.timerShowKosong()
+                        return
+                    }
                 } else {
-                
-                guard let uid = Auth.auth().currentUser?.uid else {return}
-                print("telah berhasil login dengan UID", uid)
-                
-                let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
-                    
-                self.view.window?.rootViewController = myTabbar
-                self.view.window?.makeKeyAndVisible()
+                    self.masukHome()
+                }
             }
         }
+    }
+    
+    func masukHome() {
+        let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
+        self.view.window?.rootViewController = myTabbar
+        self.view.window?.makeKeyAndVisible()
     }
     
     @IBAction func kembali(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
+    func timerShowKosong(){
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.errorLabel.text = ""
+        }
+    }
     
 }

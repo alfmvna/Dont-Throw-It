@@ -11,7 +11,7 @@ import FirebaseAuth
 import Firebase
 import FirebaseStorage
 import FirebaseDatabase
-import FirebaseFirestore
+import JGProgressHUD
 
 class ProfilViewController: UIViewController {
     
@@ -24,6 +24,7 @@ class ProfilViewController: UIViewController {
     var image: UIImage? = nil
     var alertController: UIAlertController?
 
+    @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var viewCorner: UIView!
     @IBOutlet weak var profilimage: UIImageView!
     @IBOutlet weak var logoutButton: UIButton!
@@ -54,6 +55,18 @@ class ProfilViewController: UIViewController {
         fetchdata()
         setupViews()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.contohTextField.becomeFirstResponder()
+            self.emailTextField.becomeFirstResponder()
+            self.passwordTextField.becomeFirstResponder()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     lazy var imagePickerController: UIImagePickerController = {
@@ -91,19 +104,25 @@ class ProfilViewController: UIViewController {
     
     
     func logout(){
+        view.endEditing(true)
         alertController = UIAlertController(title: "Alert", message: "Apakah Anda Ingin Keluar ?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Batal", style: .destructive) { (action) in
-            print("Tekan Batal")
+            print("Batal Di Pilih")
         }
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             do {
                 try Auth.auth().signOut()
-                print("Berhasil Logout")
-            } catch let err {
-                print("Gagal Untuk Logout", err)
+            } catch _ {
+                self.alertController = UIAlertController(title: "Alert", message: "Logout Gagal", preferredStyle: .alert)
+                self.alertController?.addAction(cancelAction)
+                self.present(self.alertController!, animated: true)
             }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let signInVC = storyboard.instantiateViewController(withIdentifier: "VC")
+            self.present(signInVC, animated: true, completion: nil)
+            
         }
-
         alertController?.addAction(cancelAction)
         alertController?.addAction(okAction)
         self.present(alertController!, animated: true)
@@ -146,24 +165,36 @@ class ProfilViewController: UIViewController {
 
     //simpanfoto
     @IBAction func simpan(_ sender: Any) {
+        view.endEditing(true)
+        guard let uid = Auth.auth().currentUser?.uid else {return}
         guard let editedImage = self.image else {
-            print("Avatar is nil")
             return
         }
         guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else { return }
         
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-        let storageProfileRef = storageRef.child("users").child("profile").child(uid)
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpg"
-        
         alertController = UIAlertController(title: "Alert", message: "Apakah Anda Ingin Menyimpan ?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Batal", style: .cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Batal", style: .destructive) { (action) in
             print("Tekan Batal")
         }
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            
+            let postObject = [
+                "NamaDepan": self.contohTextField.text!,
+                "UpdateTerbaru": [".sv":"timestamp"]
+                ] as [String:Any]
+            
+            self.databaseRef.child("users").child("profile").child(uid).updateChildValues(postObject) { (error, database) in
+                if error != nil {
+                    print("Error UpdateChild.Users")
+                }
+            }
+            
+            let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
+            let storageProfileRef = storageRef.child("users").child("profile").child(uid)
+            
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpg"
+            
             storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
                 if error != nil {
                     print(error!)
@@ -184,41 +215,17 @@ class ProfilViewController: UIViewController {
                     }
                 })
             }
-            
-            let postObject = [
-                "NamaDepan": self.contohTextField.text!,
-                "UpdateTerbaru": [".sv":"timestamp"]
-            ] as [String:Any]
-            
-            self.databaseRef.child("users").child("profile").child(uid).updateChildValues(postObject) { (error, database) in
-                if error != nil {
-                    print("Error UpdateChild.Users")
-                }
-            }
-            
-//            let currentUser = Auth.auth().currentUser
-//            currentUser?.updateEmail(to: self.emailTextField.text!) { error in
-//                if let error = error {
-//                    print("Masalah Pada Email")
-//                } else {
-//                    print("CHANGED")
-//                    let uid = Auth.auth().currentUser!.uid
-//                    let thisUserRef = self.databaseRef.child("users").child(uid)
-//                    let thisUserEmailRef = thisUserRef.child("email")
-//                    thisUserEmailRef.setValue(self.emailTextField.text!)
-//                }
-//            }
-//            currentUser?.updatePassword(to: self.passwordTextField.text!, completion: { (error) in
-//                if error != nil{
-//                    print("Masalah Pada Password")
-//                } else {
-//                    print("berhasil")
-//                }
-//            })
+            self.errorLabel.text = ""
+            self.timerShowKosong()
         }
         alertController?.addAction(cancelAction)
         alertController?.addAction(okAction)
-        self.present(alertController!, animated: true)
+        self.present(alertController!, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) {
+                self.showHUDWithTransform()
+            }
+        }
+        
 
     }
     
@@ -229,9 +236,33 @@ class ProfilViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    func timerShowKosong(){
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.errorLabel.text = ""
+        }
+    }
+    
+    func showHUDWithTransform() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Loading.."
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.5) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = "Berhasil Tersimpan"
+                hud.position = .center
+            }
+        }
+        
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
 }
-
-
 
 extension ProfilViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     

@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
+import JGProgressHUD
 
 class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDelegate {
     
@@ -41,6 +42,15 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
     @IBOutlet weak var uploadGambar: UIImageView!
     @IBOutlet weak var errorLabel: UILabel!
 
+    func validateField() -> String? {
+        if alamatTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            nohpTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            timerShowKosong()
+            return "Isi Kotak Yang Kosong"
+        }
+        return nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,42 +59,55 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.alamatTextField.becomeFirstResponder()
+            self.nohpTextField.becomeFirstResponder()
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     @IBAction func simpan(_ sender: Any) {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
         
+        guard let uid = Auth.auth().currentUser?.uid else {return}
         let postRef = Database.database().reference().child("posts").child("profile").child(uid)
         guard let key = postRef.childByAutoId().key else {return}
         
-        let postObject = [
-            "alamat": alamatTextField.text!,
-            "no handphone": nohpTextField.text!,
-            "timestamp": [".sv":"timestamp"]
-        ] as [String:Any]
-        
-        databaseRef.child("posts").child("profile").child(uid).child(key).setValue(postObject) { (error, database) in
-            if error != nil {
-                print(error!)
-            }
-        }
-        
         guard let editedImage = self.image else {
             self.errorLabel.text = "Masukkan Foto"
+            self.timerShowKosong()
             return
         }
         
         guard let imageData = editedImage.jpegData(compressionQuality: 0.4) else { return }
-        
-        let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-        let storageProfileRef = storageRef.child("users").child("posts").child(uid)
-        
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpg"
         
         alertController = UIAlertController(title: "Alert", message: "Apakah Anda Ingin Memposting ?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Batal", style: .cancel) { (action) in
             print("Tekan Batal")
         }
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+        
+            let postObject = [
+                "alamat": self.alamatTextField.text!,
+                "no handphone": self.nohpTextField.text!,
+                "timestamp": [".sv":"timestamp"]
+                ] as [String:Any]
+            
+            self.databaseRef.child("posts").child("profile").child(uid).child(key).setValue(postObject) { (error, database) in
+                if error != nil {
+                    print(error!)
+                }
+            }
+            
+            let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
+            let storageProfileRef = storageRef.child("users").child("posts").child(uid)
+            
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpg"
+            
             storageProfileRef.putData(imageData, metadata: metadata) { (storageMetaData, error) in
                 if error != nil {
                     print(error!)
@@ -115,6 +138,14 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         
         self.alamatTextField.text?.removeAll()
         self.nohpTextField.text?.removeAll()
+        
+        self.present(alertController!, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) {
+                self.showHUDWithTransform()
+                self.view.endEditing(true)
+            }
+        }
+        
     }
         
     @IBAction func cancel(_ sender: Any) {
@@ -125,6 +156,30 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         showImagePickerControllerActionSheet()
     }
     
+    func timerShowKosong(){
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+            self.errorLabel.text = ""
+        }
+    }
+    
+    func showHUDWithTransform() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Loading.."
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.5) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = "Berhasil Tersimpan"
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
     
 }
 
@@ -165,6 +220,7 @@ extension NewPostViewController: UIImagePickerControllerDelegate, UINavigationCo
         
         dismiss(animated: true, completion: nil)
     }
+    
     
 }
 
