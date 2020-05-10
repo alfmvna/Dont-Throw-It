@@ -1,9 +1,9 @@
 //
 //  Utilities.swift
-//  customauth
+//  Jangan Di Buang
 //
-//  Created by Christopher Ching on 2019-05-09.
-//  Copyright © 2019 Christopher Ching. All rights reserved.
+//  Created by Allif Maulana on 19/04/20.
+//  Copyright © 2020 Allif Maulana. All rights reserved.
 //
 
 import Foundation
@@ -42,6 +42,7 @@ class Utilities {
 
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
         return passwordTest.evaluate(with: password)
+        
     }
     
     static func isEmailValid(_ email : String) -> Bool {

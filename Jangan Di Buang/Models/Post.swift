@@ -9,15 +9,19 @@
 import Foundation
 
 class Post{
-    var uid:String
+    var keterangan:String
+    var photourl:URL
     var author:String
     var alamat:String
     var nohp:String
+    var timestamp:Double
     
-    init(uid:String, author:String, alamat:String, nohp:String) {
-        self.uid = uid
+    init(keterangan:String, photourl:URL, author:String, alamat:String, nohp:String, timestamp:Double) {
+        self.keterangan = keterangan
+        self.photourl = photourl
         self.author = author
         self.alamat = alamat
         self.nohp = nohp
+        self.timestamp = timestamp
     }
 }

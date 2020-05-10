@@ -29,19 +29,26 @@ class LoginViewController: UIViewController{
     @IBOutlet weak var masukButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var viewMasuk: UIView!
+    @IBOutlet weak var checkBox: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         masukButton.layer.cornerRadius = 15.00
         viewMasuk.layer.cornerRadius = 10.00
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
-    
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.emailText.becomeFirstResponder()
             self.passwordText.becomeFirstResponder()
+        }
+    }
+    
+    @IBAction func checkBoxTapped(_ sender: UIButton) {
+        if sender.isSelected {
+            sender.isSelected = false
+        } else {
+            sender.isSelected = true
         }
     }
     
@@ -52,10 +59,7 @@ class LoginViewController: UIViewController{
     @IBAction func masukTapped(_ sender: Any) {
         self.view.endEditing(true)
         
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "Loading"
-        hud.show(in: self.view)
-        hud.dismiss(afterDelay: 2.5)
+        self.loading()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
             let email = self.emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -68,18 +72,15 @@ class LoginViewController: UIViewController{
                     if Utilities.isEmailValid(email) == false {
                         if self.emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
                             self.passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-                            self.errorLabel.text = ("Silahkan Isi Kotak Yang Kosong")
-                            self.timerShowKosong()
+                            self.silahkanisi()
                             return
                         } else {
-                            self.errorLabel.text = ("Email Anda Salah")
-                            self.timerShowKosong()
+                            self.emailSalah()
                             return
                         }
                     }
                     if Utilities.isPasswordValid(password) == false {
-                        self.errorLabel.text = ("Password Salah")
-                        self.timerShowKosong()
+                        self.passwordSalah()
                         return
                     }
                 } else {
@@ -99,10 +100,64 @@ class LoginViewController: UIViewController{
         dismiss(animated: true, completion: nil)
     }
     
-    func timerShowKosong(){
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
-            self.errorLabel.text = ""
-        }
+}
+
+extension LoginViewController{
+    func loading(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Loading"
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
     }
     
+    func silahkanisi(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Silahkan Isi Yang Kosong")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func emailSalah(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Email Anda Salah")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func passwordSalah(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Password Salah")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
 }

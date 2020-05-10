@@ -74,8 +74,7 @@ class SignUpViewController: UIViewController {
             namabelakangText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             emailText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordText.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            showError("Isi Kotak Yang Kosong")
-            timerShowKosong()
+            self.silahkanisi()
             return ""
         }
         
@@ -83,14 +82,12 @@ class SignUpViewController: UIViewController {
         let cleanedEmail = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if Utilities.isPasswordValid(cleanedPassword) == false {
-            showError("Password Wajib 6 Character, Huruf Besar, Angka Atau Simbol")
-            timerShowKosong()
+            self.passwordSalah()
             return ""
         }
         
         if Utilities.isEmailValid(cleanedEmail) == false {
-            showError("Email Anda Salah Format")
-            timerShowKosong()
+            self.emailSalah()
             return ""
         }
         return nil
@@ -98,10 +95,6 @@ class SignUpViewController: UIViewController {
 
     @IBAction func daftarTapped(_ sender: Any) {
         self.view.endEditing(true)
-        let hud = JGProgressHUD(style: .dark)
-        hud.textLabel.text = "Loading"
-        hud.show(in: self.view)
-        hud.dismiss(afterDelay: 3.0)
         
         // Validasi
         let error = validateFields()
@@ -122,12 +115,10 @@ class SignUpViewController: UIViewController {
             if err != nil {
                 Auth.auth().fetchSignInMethods(forEmail: self.emailText.text!, completion: { (provider, error) in
                     if let error = error {
-                        self.showError("Email Tersedia")
-                        self.timerShowKosong()
+                        self.emailAda()
                         print(error)
                     } else if let provider = provider {
-                        self.showError("Email Sudah Terdaftar")
-                        self.timerShowKosong()
+                        self.emailGada()
                         print(provider)
                     }
                 })
@@ -144,11 +135,6 @@ class SignUpViewController: UIViewController {
         }
     }
     
-    func showError(_ message:String) {
-        
-        errorLabel.text = message
-        errorLabel.alpha = 1
-    }
     
     func transitionToHome() {
 
@@ -162,12 +148,6 @@ class SignUpViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    func timerShowKosong(){
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
-            self.errorLabel.text = ""
-        }
-    }
-    
 }
 
 extension UITextField {
@@ -179,5 +159,104 @@ extension UITextField {
         rightView = iconContainerView
         rightViewMode = .always
         self.tintColor = .lightGray
+    }
+}
+
+extension SignUpViewController{
+    
+    func silahkanisi(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Silahkan Isi Yang Kosong")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func emailAda(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Email Tersedia")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 1.5)
+    }
+    
+    func emailGada(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Email Tidak Tersedia")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 1.5)
+    }
+    
+    func emailSalah(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Email Anda Salah")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func passwordSalah(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Password Salah")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func passwordSalahFormat(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Password Wajib 8 Character, 1 Huruf Besar dan Angka")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 1.5)
     }
 }

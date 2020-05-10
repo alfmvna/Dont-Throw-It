@@ -125,7 +125,11 @@ class ProfilViewController: UIViewController {
         }
         alertController?.addAction(cancelAction)
         alertController?.addAction(okAction)
-        self.present(alertController!, animated: true)
+        self.present(alertController!, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) {
+                self.Keluar()
+            }
+        }
     }
     
     //fetch data
@@ -215,14 +219,12 @@ class ProfilViewController: UIViewController {
                     }
                 })
             }
-            self.errorLabel.text = ""
-            self.timerShowKosong()
         }
         alertController?.addAction(cancelAction)
         alertController?.addAction(okAction)
         self.present(alertController!, animated: true) {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) {
-                self.showHUDWithTransform()
+                self.berhasilTersimpan()
             }
         }
         
@@ -234,32 +236,6 @@ class ProfilViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-    }
-    
-    func timerShowKosong(){
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
-            self.errorLabel.text = ""
-        }
-    }
-    
-    func showHUDWithTransform() {
-        let hud = JGProgressHUD(style: .dark)
-        hud.vibrancyEnabled = true
-        hud.textLabel.text = "Loading.."
-        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
-        
-        hud.show(in: self.view)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
-            UIView.animate(withDuration: 0.5) {
-                hud.indicatorView = nil
-                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
-                hud.textLabel.text = "Berhasil Tersimpan"
-                hud.position = .center
-            }
-        }
-        
-        hud.dismiss(afterDelay: 3.0)
     }
     
 }
@@ -305,3 +281,81 @@ extension ProfilViewController: UIImagePickerControllerDelegate, UINavigationCon
 }
 
 
+extension ProfilViewController{
+    
+    func Keluar(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Keluar"
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+    }
+    
+    func masukkanFoto(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Masukkan Foto")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func silahkanisi(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Silahkan Isi Yang Kosong")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func passwordSalahFormat(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Password Wajib 8 Character, 1 Huruf Besar dan Angka")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 1.5)
+    }
+    
+    func berhasilTersimpan() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Loading.."
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.5) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = "Berhasil Tersimpan"
+                hud.position = .center
+            }
+        }
+        
+        hud.dismiss(afterDelay: 3.0)
+    }
+}

@@ -1,9 +1,9 @@
-///Users/alfmuna/Downloads/CustomLoginDemo 2/CustomLoginDemo/Helpers/Constants.swift
-//  Constants.swift
-//  CustomLoginDemo
 //
-//  Created by Christopher Ching on 2019-07-23.
-//  Copyright © 2019 Christopher Ching. All rights reserved.
+//  Constants.swift
+//  Jangan Di Buang
+//
+//  Created by Allif Maulana on 19/04.20.
+//  Copyright © 2020 Allif Maulana. All rights reserved.
 //
 
 import Foundation

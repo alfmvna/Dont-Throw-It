@@ -39,14 +39,20 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
             nohpTextField.tintColor = .darkGray
         }
     }
+    @IBOutlet weak var infoTextView: UITextView!{
+        didSet {
+            infoTextView.tintColor = .darkGray
+            infoTextView.backgroundColor = .lightGray
+        }
+    }
+    
     @IBOutlet weak var uploadGambar: UIImageView!
-    @IBOutlet weak var errorLabel: UILabel!
-
+    
     func validateField() -> String? {
         if alamatTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            nohpTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            timerShowKosong()
-            return "Isi Kotak Yang Kosong"
+            nohpTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            infoTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) == ""{
+            return ""
         }
         return nil
     }
@@ -76,9 +82,13 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         let postRef = Database.database().reference().child("posts").child("profile").child(uid)
         guard let key = postRef.childByAutoId().key else {return}
         
+        if validateField() != nil {
+            self.silahkanisi()
+            return
+        }
+        
         guard let editedImage = self.image else {
-            self.errorLabel.text = "Masukkan Foto"
-            self.timerShowKosong()
+            self.masukkanFoto()
             return
         }
         
@@ -89,18 +99,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
             print("Tekan Batal")
         }
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-        
-            let postObject = [
-                "alamat": self.alamatTextField.text!,
-                "no handphone": self.nohpTextField.text!,
-                "timestamp": [".sv":"timestamp"]
-                ] as [String:Any]
-            
-            self.databaseRef.child("posts").child("profile").child(uid).child(key).setValue(postObject) { (error, database) in
-                if error != nil {
-                    print(error!)
-                }
-            }
             
             let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
             let storageProfileRef = storageRef.child("users").child("posts").child(uid)
@@ -119,33 +117,50 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
                         return
                     }
                     if let urlText = url?.absoluteString{
-                        self.databaseRef.child("users").child("profile").child(uid).child(key).updateChildValues(["PhotoURL" : urlText], withCompletionBlock: { (error, ref) in
+                        
+                        //Fetch link dari storage ubah ke url database
+                        self.databaseRef.child("posts").child(uid).child(key).updateChildValues(["photoURL" : urlText], withCompletionBlock: { (error, ref) in
                             if error != nil {
-                                print(error!)
                                 return
                             }
                         })
-                    } else {
-                        self.dismiss(animated: true, completion: nil)
                     }
-                });  self.dismiss(animated: true, completion: nil)
+                });
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
+
+            self.databaseRef.child("users").child("profile").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dict = snapshot.value as? [String: AnyObject] else {return}
+                
+                let user = CurrentUser(uid: uid, dictionary: dict)
+                
+                let postObject = [
+                    "nama": user.namadepan,
+                    "photoUser": user.photourl,
+                    "alamat": self.alamatTextField.text!,
+                    "nohp" : self.nohpTextField.text!,
+                    "keterangan": self.infoTextView.text!,
+                    "timestamp": [".sv":"timestamp"]
+                    ] as [String:Any]
+                
+                self.databaseRef.child("posts").child(uid).child(key).setValue(postObject) { (error, database) in
+                    if error != nil {
+                        return
+                    }
+                }
+            })
+            
         }
-    
+
         self.alertController?.addAction(cancelAction)
         self.alertController?.addAction(okAction)
-        self.present(self.alertController!, animated: true)
-        
-        self.alamatTextField.text?.removeAll()
-        self.nohpTextField.text?.removeAll()
-        
         self.present(alertController!, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2000)) {
-                self.showHUDWithTransform()
-                self.view.endEditing(true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                self.berhasilTersimpan()
             }
         }
-        
     }
         
     @IBAction func cancel(_ sender: Any) {
@@ -154,31 +169,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
 
     @IBAction func pilihgambar(_ sender: Any) {
         showImagePickerControllerActionSheet()
-    }
-    
-    func timerShowKosong(){
-        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
-            self.errorLabel.text = ""
-        }
-    }
-    
-    func showHUDWithTransform() {
-        let hud = JGProgressHUD(style: .dark)
-        hud.vibrancyEnabled = true
-        hud.textLabel.text = "Loading.."
-        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
-        
-        hud.show(in: self.view)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
-            UIView.animate(withDuration: 0.5) {
-                hud.indicatorView = nil
-                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
-                hud.textLabel.text = "Berhasil Tersimpan"
-                hud.position = .center
-            }
-        }
-        hud.dismiss(afterDelay: 3.0)
     }
     
 }
@@ -224,3 +214,57 @@ extension NewPostViewController: UIImagePickerControllerDelegate, UINavigationCo
     
 }
 
+extension NewPostViewController{
+    
+    func masukkanFoto(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Masukkan Foto")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func silahkanisi(){
+        let hud = JGProgressHUD(style: .dark)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.3) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = ("Silahkan Isi Yang Kosong")
+                hud.position = .center
+            }
+        }
+        hud.dismiss(afterDelay: 3.0)
+    }
+    
+    func berhasilTersimpan() {
+        let hud = JGProgressHUD(style: .dark)
+        hud.vibrancyEnabled = true
+        hud.textLabel.text = "Loading.."
+        hud.layoutMargins = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0)
+        
+        hud.show(in: self.view)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+            UIView.animate(withDuration: 0.5) {
+                hud.indicatorView = nil
+                hud.textLabel.font = UIFont.systemFont(ofSize: 15.0)
+                hud.textLabel.text = "Berhasil Tersimpan"
+                hud.position = .center
+            }
+        }
+        
+        hud.dismiss(afterDelay: 3.0)
+    }
+}

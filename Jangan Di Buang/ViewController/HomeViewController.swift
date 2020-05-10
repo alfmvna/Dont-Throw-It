@@ -11,55 +11,69 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
-class HomeViewController: ViewController, UITableViewDelegate, UITableViewDataSource{
+class HomeViewController: ViewController{
     
-    var tableView:UITableView!
+    var posts = [Post]()
+    var databaseRef = Database.database().reference()
     
-    var posts = [
-        Post(uid: "1", author: "Allif Maulana", alamat: "Batu Aji", nohp: "081369696969"),
-        Post(uid: "2", author: "Yani", alamat: "Batam Center", nohp: "085656565656"),
-        Post(uid: "3", author: "Fajar", alamat: "Bengkong", nohp: "081234123412")
-    ]
+    @IBOutlet weak var tableView: UITableView!{
+        didSet{
+            tableView.backgroundColor = UIColor.darkGray
+        }
+    }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        tableView = UITableView(frame: view.bounds, style: .plain)
         
-        let cellNib = UINib(nibName: "PostTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "postCell")
-        
-        view.addSubview(tableView)
-
-//        var layoutGuide:UILayoutGuide
-//        
-//        layoutGuide = view.safeAreaLayoutGuide
-//        
-//        tableView.leadingAnchor.constraint(equalTo: layoutGuide.leadingAnchor).isActive = true
-//        tableView.topAnchor    .constraint(equalTo: layoutGuide.topAnchor).isActive = true
-//        tableView.trailingAnchor.constraint(equalTo: layoutGuide.trailingAnchor).isActive = true
-//        tableView.bottomAnchor.constraint(equalTo: layoutGuide.bottomAnchor).isActive = true
-        
-        tableView.delegate = self
+        loadPost()
         tableView.dataSource = self
-        tableView.reloadData()
-        tableView.tableFooterView = UIView()
+        tableView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "TableViewCell")
+        
+    }
+
+    func loadPost(){
+        let postRef = databaseRef.child("posts")
+        
+        postRef.observe(.value) { (snapshot) in
+            if snapshot.exists() {
+                for userSnapshot in snapshot.children {
+                    let userSnap = userSnapshot as! DataSnapshot
+                    for childSnapshot in userSnap.children {
+                        let childSnap = childSnapshot as! DataSnapshot
+                        let dict = childSnap.value as! [String:Any]
+                        
+                        let alamat = dict["alamat"] as! String
+                        let keterangan = dict["keterangan"] as! String
+                        let photourl = dict["photoURL"] as! String
+                        let url = URL(string: photourl)
+                        let author = dict["nama"] as! String
+                        let nohp = dict["nohp"] as! String
+                        let timestamp = dict["timestamp"] as! Double
+                        
+                        let post = Post(keterangan: keterangan, photourl: url!, author: author, alamat: alamat, nohp: nohp, timestamp: timestamp)
+                        self.posts.append(post)
+                        print(self.posts)
+                    }
+                }
+            }
+        }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
+}
+
+extension HomeViewController: UITableViewDataSource {
+        
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "postCell", for: indexPath) as! PostTableViewCell
-        cell.set(post: posts[indexPath.row])
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: IndexPath.init(row: 0, section: 10)) as! TableViewCell
+        cell.pasang(post: posts[indexPath.row])
+        
         return cell
     }
-    
     
 }
 
