@@ -118,9 +118,14 @@ class ProfilViewController: UIViewController {
                 self.present(self.alertController!, animated: true)
             }
             
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let signInVC = storyboard.instantiateViewController(withIdentifier: "VC")
-            self.present(signInVC, animated: true, completion: nil)
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let signInVC = storyboard.instantiateViewController(withIdentifier: "VC")
+//            self.present(signInVC, animated: true, completion: nil)
+            
+            let logout = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.VC) as! UINavigationController
+            
+            self.view.window?.rootViewController = logout
+            self.view.window?.makeKeyAndVisible()
             
         }
         alertController?.addAction(cancelAction)

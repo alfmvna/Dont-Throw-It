@@ -85,6 +85,7 @@ class LoginViewController: UIViewController{
                     }
                 } else {
                     self.masukHome()
+                    self.loading()
                 }
             }
         }

@@ -82,7 +82,7 @@ class SignUpViewController: UIViewController {
         let cleanedEmail = emailText.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if Utilities.isPasswordValid(cleanedPassword) == false {
-            self.passwordSalah()
+            self.passwordSalahFormat()
             return ""
         }
         
@@ -137,7 +137,6 @@ class SignUpViewController: UIViewController {
     
     
     func transitionToHome() {
-
         let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
         
         self.view.window?.rootViewController = myTabbar
@@ -257,6 +256,6 @@ extension SignUpViewController{
                 hud.position = .center
             }
         }
-        hud.dismiss(afterDelay: 1.5)
+        hud.dismiss(afterDelay: 3.0)
     }
 }

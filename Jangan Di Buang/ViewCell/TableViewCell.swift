@@ -27,6 +27,11 @@ class TableViewCell: UITableViewCell {
     }
     
     func pasang(post:Post) {
+        
+        ImageServices.getImage(withURL: post.photourl) { (image) in
+            self.fotoPost.image = image
+        }
+        
         namaUser.text = post.author
         alamatUser.text = post.alamat
         hpUser.text = post.nohp

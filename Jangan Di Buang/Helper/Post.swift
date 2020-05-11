@@ -24,4 +24,5 @@ class Post{
         self.nohp = nohp
         self.timestamp = timestamp
     }
+    
 }

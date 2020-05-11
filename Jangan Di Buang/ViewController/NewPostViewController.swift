@@ -60,16 +60,6 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ref = Database.database().reference(fromURL: "https://jangandibuang-b031c.firebaseio.com/")
-        refst = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.alamatTextField.becomeFirstResponder()
-            self.nohpTextField.becomeFirstResponder()
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -101,7 +91,7 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             
             let storageRef = Storage.storage().reference(forURL: "gs://jangandibuang-b031c.appspot.com")
-            let storageProfileRef = storageRef.child("users").child("posts").child(uid)
+            let storageProfileRef = storageRef.child("users").child("posts").child(uid).child(key)
             
             let metadata = StorageMetadata()
             metadata.contentType = "image/jpg"
@@ -116,51 +106,39 @@ class NewPostViewController: UIViewController,UITextFieldDelegate, UITextViewDel
                         print(error!)
                         return
                     }
-                    if let urlText = url?.absoluteString{
+                    if let barangurl = url?.absoluteString{
                         
-                        //Fetch link dari storage ubah ke url database
-                        self.databaseRef.child("posts").child(uid).child(key).updateChildValues(["photoURL" : urlText], withCompletionBlock: { (error, ref) in
-                            if error != nil {
-                                return
+                        self.databaseRef.child("users").child("profile").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                            guard let dict = snapshot.value as? [String: AnyObject] else {return}
+                            
+                            let user = CurrentUser(uid: uid, dictionary: dict)
+                            
+                            let postObject = [
+                                "nama": user.namadepan,
+                                "photoUser": user.photourl,
+                                "photoURL": barangurl,
+                                "alamat": self.alamatTextField.text!,
+                                "nohp" : self.nohpTextField.text!,
+                                "keterangan": self.infoTextView.text!,
+                                "timestamp": [".sv":"timestamp"]
+                                ] as [String:Any]
+                            
+                            self.databaseRef.child("posts").child(uid).child(key).setValue(postObject) { (error, database) in
+                                if error != nil {
+                                    return
+                                }
                             }
                         })
                     }
-                });
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
-                    self.dismiss(animated: true, completion: nil)
-                }
+                }); self.dismiss(animated: true, completion: nil)
             }
-
-            self.databaseRef.child("users").child("profile").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-                guard let dict = snapshot.value as? [String: AnyObject] else {return}
-                
-                let user = CurrentUser(uid: uid, dictionary: dict)
-                
-                let postObject = [
-                    "nama": user.namadepan,
-                    "photoUser": user.photourl,
-                    "alamat": self.alamatTextField.text!,
-                    "nohp" : self.nohpTextField.text!,
-                    "keterangan": self.infoTextView.text!,
-                    "timestamp": [".sv":"timestamp"]
-                    ] as [String:Any]
-                
-                self.databaseRef.child("posts").child(uid).child(key).setValue(postObject) { (error, database) in
-                    if error != nil {
-                        return
-                    }
-                }
-            })
             
         }
 
         self.alertController?.addAction(cancelAction)
         self.alertController?.addAction(okAction)
-        self.present(alertController!, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                self.berhasilTersimpan()
-            }
-        }
+        self.present(alertController!, animated: true)
+        self.berhasilTersimpan()
     }
         
     @IBAction func cancel(_ sender: Any) {

@@ -18,20 +18,21 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if Auth.auth().currentUser != nil {
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
-                let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
-                self.view.window?.rootViewController = myTabbar
-                self.view.window?.makeKeyAndVisible()
-            }
-        }
-        
+        // Error sementara auto logged in di HomePage
+//        if Auth.auth().currentUser != nil {
+//            Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (timer) in
+//                let myTabbar = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.myTabbar) as! UITabBarController
+//                
+//                self.view.window?.rootViewController = myTabbar
+//                self.view.window?.makeKeyAndVisible()
+//            }
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

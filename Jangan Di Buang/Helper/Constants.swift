@@ -21,6 +21,8 @@ struct Constants {
         static let SignInViewController = "SignInViewController"
         
         static let VC = "VC"
+        
+        static let profile = "profile"
     }
     
     

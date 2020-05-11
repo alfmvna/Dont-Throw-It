@@ -13,6 +13,10 @@ import FirebaseStorage
 
 class PostingViewController: UIViewController{
     
+    var posts = [Post]()
+    var databaseRef = Database.database().reference()
+    var refreshControl: UIRefreshControl!
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -26,10 +30,21 @@ class PostingViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.dataSource = self
+        tableView.register(UINib(nibName: "PostingViewCell", bundle: nil), forCellReuseIdentifier: "PostingViewCell")
         
-        tableView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "TableViewCell")
+        loadPost()
+        
+        refreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
+        
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+    }
+    
+    @objc func handleRefresh() {
+        
+        tableView.reloadData()
+        self.refreshControl.endRefreshing()
         
     }
     
@@ -37,17 +52,43 @@ class PostingViewController: UIViewController{
 
     }
     
+    func loadPost(){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let postRef = databaseRef.child("posts").child(uid)
+        
+        postRef.observe(.value) { (snapshot) in
+            if snapshot.exists() {
+                for userSnapshot in snapshot.children {
+                    guard let userSnap = userSnapshot as? DataSnapshot else {return}
+                    guard let dict = userSnap.value as? [String:Any] else {return}
+                    guard let alamat = dict["alamat"] as? String else {return}
+                    guard let keterangan = dict["keterangan"] as? String else {return}
+                    guard let photourl = dict["photoURL"] as? String else {return}
+                    guard let url = URL(string: photourl) else {return}
+                    guard let author = dict["nama"] as? String else {return}
+                    guard let nohp = dict["nohp"] as? String else {return}
+                    guard let timestamp = dict["timestamp"] as? Double else {return}
+                    
+                    let post = Post(keterangan: keterangan, photourl: url, author: author, alamat: alamat, nohp: nohp, timestamp: timestamp)
+                    self.posts.append(post)
+                }
+            }
+        }
+    }
+    
 }
 
 extension PostingViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: IndexPath.init(row: 0, section: 3))
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PostingViewCell", for: indexPath) as! PostingViewCell
+        cell.set(post: posts[indexPath.row])
+        
         
         return cell
     }
