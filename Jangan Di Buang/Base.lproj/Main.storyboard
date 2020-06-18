@@ -321,8 +321,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="821-5l-iHK"/>
                     </view>
-                    <tabBarItem key="tabBarItem" springLoaded="YES" systemItem="search" id="JMw-Th-8Uw">
-                        <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                    <tabBarItem key="tabBarItem" image="janganDibuang2" springLoaded="YES" id="JMw-Th-8Uw">
+                        <inset key="imageInsets" minX="0.0" minY="7" maxX="0.0" maxY="-9"/>
                         <color key="badgeColor" name="systemYellowColor" catalog="System" colorSpace="catalog"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -600,9 +600,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="w9h-O6-fVN"/>
                     </view>
-                    <tabBarItem key="tabBarItem" largeContentSizeImage="JanganDiBuang" springLoaded="YES" systemItem="bookmarks" id="5lr-FQ-BpR">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
-                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="7" maxX="0.0" maxY="0.0"/>
+                    <tabBarItem key="tabBarItem" image="JanganDiBuang" largeContentSizeImage="JanganDiBuang" springLoaded="YES" id="5lr-FQ-BpR">
+                        <inset key="imageInsets" minX="0.0" minY="18" maxX="0.0" maxY="-9"/>
+                        <inset key="landscapeImageInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="6" maxX="0.0" maxY="0.0"/>
                         <color key="badgeColor" name="systemYellowColor" catalog="System" colorSpace="catalog"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -970,8 +971,8 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MOD-BZ-qxE"/>
                     </view>
-                    <tabBarItem key="tabBarItem" springLoaded="YES" systemItem="more" id="NMx-Dk-3Kj">
-                        <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
+                    <tabBarItem key="tabBarItem" image="icons8-name-100" springLoaded="YES" id="NMx-Dk-3Kj">
+                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-19"/>
                         <color key="badgeColor" name="systemYellowColor" catalog="System" colorSpace="catalog"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -995,7 +996,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="JanganDiBuang" width="200" height="200"/>
+        <image name="JanganDiBuang" width="66.666664123535156" height="66.666664123535156"/>
         <image name="Screen Shot 2020-05-08 at 03.40.42" width="214" height="442"/>
         <image name="icons8-cancel-96" width="96" height="96"/>
         <image name="icons8-check-all-100" width="100" height="100"/>
@@ -1003,10 +1004,11 @@
         <image name="icons8-client-management-96 (1)" width="96" height="96"/>
         <image name="icons8-client-management-97" width="96" height="96"/>
         <image name="icons8-go-back-64" width="64" height="64"/>
-        <image name="icons8-name-100" width="100" height="100"/>
+        <image name="icons8-name-100" width="33.333332061767578" height="33.333332061767578"/>
         <image name="icons8-plus-512" width="512" height="512"/>
         <image name="icons8-plus-96" width="96" height="96"/>
         <image name="icons8-unchecked-all-100" width="100" height="100"/>
+        <image name="janganDibuang2" width="66.666664123535156" height="66.666664123535156"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="lT0-Uu-kJc"/>

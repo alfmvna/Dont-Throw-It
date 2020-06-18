@@ -43,12 +43,12 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TimeStamp" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chp-EN-5y5">
-                        <rect key="frame" x="214" y="9" width="163" height="18"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TimeStamp" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chp-EN-5y5">
+                        <rect key="frame" x="214" y="13" width="163" height="76.5"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="163" id="cxp-Ve-fsC"/>
+                            <constraint firstAttribute="width" constant="163" id="K7b-vF-6ab"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -56,18 +56,19 @@
                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="LzX-VP-zpj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="1im-0v-tS9"/>
+                    <constraint firstItem="Chp-EN-5y5" firstAttribute="firstBaseline" secondItem="cRP-5E-vCt" secondAttribute="baseline" id="2Ua-YW-E5V"/>
                     <constraint firstItem="Vo7-zD-SAM" firstAttribute="top" secondItem="cRP-5E-vCt" secondAttribute="bottom" constant="11" id="2fe-Se-mDY"/>
                     <constraint firstItem="cRP-5E-vCt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="B9o-zh-5oD"/>
-                    <constraint firstItem="Chp-EN-5y5" firstAttribute="leading" secondItem="cRP-5E-vCt" secondAttribute="trailing" constant="8" symbolic="YES" id="DSL-pI-4CD"/>
                     <constraint firstItem="eRm-tb-OaC" firstAttribute="top" secondItem="Vo7-zD-SAM" secondAttribute="bottom" constant="8" symbolic="YES" id="Fm6-Ez-0z9"/>
                     <constraint firstAttribute="trailing" secondItem="Vo7-zD-SAM" secondAttribute="trailing" constant="14" id="Hku-KZ-ZAm"/>
+                    <constraint firstItem="Chp-EN-5y5" firstAttribute="leading" secondItem="cRP-5E-vCt" secondAttribute="trailing" constant="8" symbolic="YES" id="Hvl-kI-lOG"/>
                     <constraint firstItem="LzX-VP-zpj" firstAttribute="leading" secondItem="eRm-tb-OaC" secondAttribute="leading" constant="-10" id="LXh-Nm-lbs"/>
-                    <constraint firstItem="Chp-EN-5y5" firstAttribute="baseline" secondItem="cRP-5E-vCt" secondAttribute="baseline" id="MZB-sM-7Pa"/>
                     <constraint firstItem="LzX-VP-zpj" firstAttribute="top" secondItem="eRm-tb-OaC" secondAttribute="bottom" constant="8" symbolic="YES" id="OTz-Bd-nGa"/>
-                    <constraint firstItem="Chp-EN-5y5" firstAttribute="trailing" secondItem="LzX-VP-zpj" secondAttribute="trailing" constant="-10" id="Q6l-q4-URx"/>
+                    <constraint firstItem="Chp-EN-5y5" firstAttribute="baseline" secondItem="eRm-tb-OaC" secondAttribute="baseline" id="Rj0-HS-Lo1"/>
                     <constraint firstItem="Vo7-zD-SAM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="17" id="UDJ-Ij-hEV"/>
                     <constraint firstItem="cRP-5E-vCt" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="eVS-IO-sSj"/>
                     <constraint firstAttribute="trailing" secondItem="LzX-VP-zpj" secondAttribute="trailing" constant="13" id="hdS-pR-IYh"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Chp-EN-5y5" secondAttribute="trailing" constant="3" id="q3q-1L-eGt"/>
                     <constraint firstAttribute="bottom" secondItem="LzX-VP-zpj" secondAttribute="bottom" constant="6.5" id="qAm-zs-PYx"/>
                 </constraints>
             </tableViewCellContentView>
@@ -76,6 +77,7 @@
                 <outlet property="alamatUser" destination="Vo7-zD-SAM" id="Bxr-JG-rWm"/>
                 <outlet property="fotoPost" destination="LzX-VP-zpj" id="hH8-JL-heH"/>
                 <outlet property="hpUser" destination="eRm-tb-OaC" id="3Tn-yk-bCB"/>
+                <outlet property="keteranganTextField" destination="Chp-EN-5y5" id="7kV-YH-3Va"/>
                 <outlet property="namaUser" destination="cRP-5E-vCt" id="Xkq-6h-f0Y"/>
             </connections>
             <point key="canvasLocation" x="15.942028985507248" y="158.03571428571428"/>

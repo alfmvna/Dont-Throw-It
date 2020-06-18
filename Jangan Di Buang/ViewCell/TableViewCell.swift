@@ -14,7 +14,8 @@ class TableViewCell: UITableViewCell {
     @IBOutlet weak var namaUser: UILabel!
     @IBOutlet weak var alamatUser: UILabel!
     @IBOutlet weak var hpUser: UILabel!
-
+    @IBOutlet weak var keteranganTextField: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -35,6 +36,7 @@ class TableViewCell: UITableViewCell {
         namaUser.text = post.author
         alamatUser.text = post.alamat
         hpUser.text = post.nohp
+        keteranganTextField.text = post.keterangan
     }
     
 }
